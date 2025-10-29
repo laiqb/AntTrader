@@ -1,0 +1,20 @@
+[package]
+name = "ant-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[features]
+
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }
+dotenvy = { workspace = true }
+log = { workspace = true }
+simple_logger = { workspace = true }
+tokio = { workspace = true }
+
+[[bin]]
+name = "ant"
+path = "src/bin/cli.rs"

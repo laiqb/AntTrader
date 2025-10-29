@@ -1,0 +1,14 @@
+[package]
+name = "ant-pyo3"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "ant_pyo3"
+crate-type = ["rlib", "cdylib"]
+
+[features]
+
+
+[dependencies]

@@ -1,0 +1,51 @@
+[package]
+name = "ant-model"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "ant_model"
+crate-type = ["rlib", "staticlib"]
+
+[features]
+
+
+[dependencies]
+ant-core = {workspace = true}
+
+uuid = { workspace = true }
+rand = {workspace = true}
+serde = {workspace = true}
+serde_json = {workspace = true}
+ahash = {workspace = true}
+indexmap = {workspace = true}
+rust_decimal = { workspace = true }
+rust_decimal_macros = { workspace = true }
+anyhow = {workspace = true}
+ustr = {workspace = true}
+chrono = {workspace = true}
+derive_builder = {workspace = true}
+thousands = { workspace = true }
+evalexpr = { workspace = true }
+implied-vol = { workspace = true }
+rstest = { workspace = true}
+strum = { workspace = true }
+thiserror = { workspace = true }
+tabled = { workspace = true }
+hex = { workspace = true }
+enum_dispatch = { workspace = true }
+alloy-primitives = { workspace = true, optional = true }
+log = { workspace = true }
+regex = { workspace = true }
+sysinfo = {workspace = true}
+
+[dev-dependencies]
+criterion = { workspace = true }
+iai = { workspace = true }
+proptest = { workspace = true }
+rstest = { workspace = true}
+
+[build-dependencies]
+cbindgen = { workspace = true, optional = true }
+toml = { workspace = true }

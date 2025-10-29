@@ -1,0 +1,36 @@
+[package]
+name = "ant-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "ant_core"
+crate-type = ["rlib", "staticlib"]
+
+[features]
+
+
+[dependencies]
+uuid = { workspace = true }
+rand = {workspace = true}
+serde = {workspace = true}
+serde_json = {workspace = true}
+ahash = {workspace = true}
+indexmap = {workspace = true}
+rust_decimal = { workspace = true }
+anyhow = {workspace = true}
+chrono = { workspace = true }
+bytes = {workspace = true}
+rmp-serde = {workspace = true}
+
+
+[dev-dependencies]
+criterion = { workspace = true }
+iai = { workspace = true }
+proptest = { workspace = true }
+rstest = { workspace = true }
+
+[build-dependencies]
+cbindgen = { workspace = true, optional = true }
+toml = { workspace = true }
