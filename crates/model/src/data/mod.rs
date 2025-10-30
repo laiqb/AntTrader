@@ -63,7 +63,7 @@ pub use trade::TradeTick;
 
 use crate::identifiers::{InstrumentId, Venue};
 
-/// A built-in Nautilus data type.
+/// A built-in ant data type.
 ///
 /// Not recommended for storing large amounts of data, as the largest variant is significantly
 /// larger (10x) than the smallest.
@@ -151,7 +151,7 @@ impl Data {
 /// Marker trait for types that carry a creation timestamp.
 ///
 /// `ts_init` is the moment (UNIX nanoseconds) when this value was first generated or
-/// ingested by Nautilus. It can be used for sequencing, latency measurements,
+/// ingested by ant. It can be used for sequencing, latency measurements,
 /// or monitoring data-pipeline delays.
 pub trait HasTsInit {
     /// Returns the UNIX timestamp (nanoseconds) when the instance was created.
@@ -240,7 +240,7 @@ impl From<InstrumentClose> for Data {
 #[derive(Clone, Serialize, Deserialize)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct DataType {
     type_name: String,

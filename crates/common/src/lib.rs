@@ -15,6 +15,7 @@ pub mod testing;
 
 pub mod logging;
 pub mod generators;
+pub mod throttler;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;

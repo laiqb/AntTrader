@@ -3,6 +3,7 @@ use std::{
     fmt::{Debug, Display},
     hash::Hash,
 };
+use indexmap::IndexMap;
 
 pub trait SetLike {
     //集合中存储的 Item
@@ -114,6 +115,26 @@ where
     #[inline]
     fn is_empty(&self) -> bool {
         self.len() == 0
+    }
+}
+
+impl <K, V, S> MapLike for IndexMap<K, V, S>
+where
+    K: Eq + Hash + Display + Clone,
+    V: Debug,
+    S: std::hash::BuildHasher,
+{
+    type Key = K;
+    type Value = V;
+
+    #[inline]
+    fn contains_key(&self, k: &K) -> bool {
+        self.get(k).is_some()
+    }
+
+    #[inline]
+    fn is_empty(&self) -> bool {
+        self.is_empty()
     }
 }
 

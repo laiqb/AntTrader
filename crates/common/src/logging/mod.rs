@@ -13,7 +13,7 @@
 //  limitations under the License.
 // -------------------------------------------------------------------------------------------------
 
-//! The logging framework for Nautilus systems.
+//! The logging framework for ant systems.
 //!
 //! This module implements a high-performance logging subsystem that operates in a separate thread
 //! using an MPSC channel for log message delivery. The system uses reference counting to track
@@ -142,9 +142,9 @@ pub fn init_tracing() -> anyhow::Result<()> {
 /// Initialize logging.
 ///
 /// Logging should be used for Python and sync Rust logic which is most of
-/// the components in the [nautilus_trader](https://pypi.org/project/nautilus_trader) package.
+/// the components in the [ant_trader](https://pypi.org/project/ant_trader) package.
 /// Logging can be configured to filter components and write up to a specific level only
-/// by passing a configuration using the `NAUTILUS_LOG` environment variable.
+/// by passing a configuration using the `ant_LOG` environment variable.
 ///
 /// # Safety
 ///
@@ -152,8 +152,8 @@ pub fn init_tracing() -> anyhow::Result<()> {
 /// beginning of the run.
 ///
 /// Logging should be used for Python and sync Rust logic which is most of
-/// the components in the `nautilus_trader` package.
-/// Logging can be configured via the `NAUTILUS_LOG` environment variable.
+/// the components in the `ant_trader` package.
+/// Logging can be configured via the `ant_LOG` environment variable.
 ///
 /// # Errors
 ///

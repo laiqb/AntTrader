@@ -16,7 +16,7 @@
 //! Message types for system communication.
 //!
 //! This module provides message types used for communication between different
-//! parts of the NautilusTrader system, including data requests, execution commands,
+//! parts of the antTrader system, including data requests, execution commands,
 //! and system control messages.
 
 use ant_model::data::Data;
@@ -39,5 +39,5 @@ pub enum DataEvent {
     Response(DataResponse),
     Data(Data),
     #[cfg(feature = "defi")]
-    DeFi(nautilus_model::defi::data::DefiData),
+    DeFi(ant_model::defi::data::DefiData),
 }

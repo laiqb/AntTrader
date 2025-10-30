@@ -1,0 +1,70 @@
+[package]
+name = "ant-data"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+categories.workspace = true
+keywords.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+name = "ant_data"
+crate-type = ["rlib", "cdylib"]
+#
+#[features]
+#default = []
+#extension-module = [
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-model/extension-module",
+#  "ant-persistence/extension-module",
+#  "pyo3/extension-module",
+#]
+#ffi = [
+#  "ant-common/ffi",
+#  "ant-core/ffi",
+#  "ant-model/ffi",
+#  "ant-persistence/ffi",
+#]
+#python = [
+#  "ant-common/python",
+#  "ant-core/python",
+#  "ant-model/python",
+#  "ant-persistence/python",
+#  "pyo3",
+#]
+#high-precision = ["ant-model/high-precision"]
+#defi = [
+#  "ant-common/defi",
+#  "ant-model/defi",
+#  "alloy-primitives",
+#]
+#
+#[package.metadata.docs.rs]
+#all-features = true
+#rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+ant-common = { workspace = true }
+ant-core = { workspace = true }
+ant-model = { workspace = true }
+ant-persistence = { workspace = true }
+
+ahash = { workspace = true }
+alloy-primitives = { workspace = true, optional = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+indexmap = { workspace = true }
+log = { workspace = true }
+pyo3 = { workspace = true, optional = true }
+ustr = { workspace = true }
+
+[dev-dependencies]
+rstest = { workspace = true }

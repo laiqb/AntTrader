@@ -45,7 +45,7 @@ use crate::{
 #[derive(Clone, Copy, Eq)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct OwnBookOrder {
     /// The trader ID.
@@ -209,7 +209,7 @@ impl Display for OwnBookOrder {
 #[derive(Debug)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct OwnOrderBook {
     /// The instrument ID for the order book.

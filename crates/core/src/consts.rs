@@ -17,11 +17,11 @@
 
 use std::env;
 
-/// The NautilusTrader string constant.
+/// The antTrader string constant.
 pub static ANT_TRADER: &str = "AntTrader";
 
-/// The NautilusTrader version string read from the top-level `pyproject.toml` at compile time.
+/// The antTrader version string read from the top-level `pyproject.toml` at compile time.
 pub static ANT_VERSION: &str = ("ANT_VERSION");
 
-/// The NautilusTrader common User-Agent string including the current version at compile time.
+/// The antTrader common User-Agent string including the current version at compile time.
 pub static ANT_USER_AGENT: &str = ("ANT_USER_AGENT");

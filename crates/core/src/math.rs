@@ -28,7 +28,7 @@
 /// # Usage
 ///
 /// ```rust
-/// use nautilus_core::approx_eq;
+/// use ant_core::approx_eq;
 ///
 /// let a = 0.1 + 0.2;
 /// let b = 0.3;

@@ -32,7 +32,7 @@ pub fn log_header(trader_id: TraderId, machine_id: &str, instance_id: UUID4, com
     let pid = std::process::id();
 
     header_sepr(c, "=================================================================");
-    header_sepr(c, " NAUTILUS TRADER - Automated Algorithmic Trading Platform");
+    header_sepr(c, " ant TRADER - Automated Algorithmic Trading Platform");
     header_sepr(c, " by Nautech Systems Pty Ltd.");
     header_sepr(c, " Copyright (C) 2015-2025. All rights reserved.");
     header_sepr(c, "=================================================================");
@@ -92,7 +92,7 @@ fn log_python_versioning(c: Ustr) {
         return;
     }
 
-    let package = "nautilus_trader";
+    let package = "ant_trader";
     header_line(c, &format!("{package}: {}", python_package_version(package)));
     header_line(c, &format!("python: {}", python_version()));
 
@@ -156,10 +156,10 @@ fn bytes_to_gib(b: u64) -> f64 {
 
 #[cfg(feature = "python")]
 fn python_package_version(package: &str) -> String {
-    nautilus_core::python::version::get_python_package_version(package)
+    ant_core::python::version::get_python_package_version(package)
 }
 
 #[cfg(feature = "python")]
 fn python_version() -> String {
-    nautilus_core::python::version::get_python_version()
+    ant_core::python::version::get_python_version()
 }

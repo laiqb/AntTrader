@@ -1,0 +1,82 @@
+[package]
+name = "ant-live"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+categories.workspace = true
+keywords.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+name = "ant_live"
+crate-type = ["rlib", "cdylib"]
+#
+#[features]
+#default = []
+#extension-module = [
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-data/extension-module",
+#  "ant-execution/extension-module",
+#  "ant-model/extension-module",
+#  "ant-portfolio/extension-module",
+#  "ant-risk/extension-module",
+#  "pyo3/extension-module",
+#]
+#ffi = [
+#  "ant-common/ffi",
+#  "ant-core/ffi",
+#  "ant-model/ffi",
+#]
+#python = [
+#  "ant-common/python",
+#  "ant-core/python",
+#  "ant-data/python",
+#  "ant-execution/python",
+#  "ant-model/python",
+#  "ant-portfolio/python",
+#  "ant-risk/python",
+#  "ant-system/python",
+#  "pyo3",
+#]
+#defi = ["ant-common/defi"]
+#
+#[package.metadata.docs.rs]
+#all-features = true
+#rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+ant-common = { workspace = true }
+ant-core = { workspace = true }
+ant-data = { workspace = true }
+ant-execution = { workspace = true }
+ant-model = { workspace = true }
+ant-persistence = { workspace = true }
+ant-portfolio = { workspace = true }
+ant-risk = { workspace = true }
+ant-system = { workspace = true }
+
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+log = { workspace = true }
+pyo3 = { workspace = true, optional = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+rstest = { workspace = true }
+ustr = { workspace = true }
+
+# Run with `cargo bench -p ant-live --bench runner`
+[[bench]]
+name = "runner"
+harness = false

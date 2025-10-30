@@ -34,7 +34,7 @@ use crate::{
     types::{Currency, Money, Price, Quantity},
 };
 
-/// Represents an event where an order has been denied by the Nautilus system.
+/// Represents an event where an order has been denied by the ant system.
 ///
 /// This could be due an unsupported feature, a risk limit exceedance, or for
 /// any other reason that an otherwise valid order is not able to be submitted.
@@ -44,7 +44,7 @@ use crate::{
 #[serde(tag = "type")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct OrderDenied {
     /// The trader ID associated with the event.

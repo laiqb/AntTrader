@@ -44,7 +44,7 @@ use ustr::Ustr;
 #[cfg(feature = "defi")]
 use {
     alloy_primitives::Address,
-    nautilus_model::defi::{Block, Blockchain, Pool, PoolLiquidityUpdate, PoolSwap},
+    ant_model::defi::{Block, Blockchain, Pool, PoolLiquidityUpdate, PoolSwap},
 };
 
 use super::{Actor, DataActor, DataActorCore, data_actor::DataActorConfig};
@@ -1541,7 +1541,7 @@ fn test_request_instrument(
 //     let actor = get_actor_unchecked::<TestDataActor>(&actor_id);
 //     actor.start().unwrap();
 //
-//     use nautilus_model::defi::{Dex, DexType, Pool, Token, chain::chains, dex::AmmType};
+//     use ant_model::defi::{Dex, DexType, Pool, Token, chain::chains, dex::AmmType};
 //
 //     use crate::msgbus::switchboard::get_defi_pool_topic;
 //
@@ -1606,7 +1606,7 @@ fn test_request_instrument(
 //     let actor = get_actor_unchecked::<TestDataActor>(&actor_id);
 //     actor.start().unwrap();
 //
-//     use nautilus_model::{
+//     use ant_model::{
 //         defi::{AmmType, Dex, DexType, chain::chains},
 //         identifiers::InstrumentId,
 //     };
@@ -1666,7 +1666,7 @@ fn test_request_instrument(
 //     let actor = get_actor_unchecked::<TestDataActor>(&actor_id);
 //     actor.start().unwrap();
 //
-//     use nautilus_model::defi::{Dex, DexType, Pool, chain::chains, dex::AmmType};
+//     use ant_model::defi::{Dex, DexType, Pool, chain::chains, dex::AmmType};
 //
 //     let chain = Arc::new(chains::ETHEREUM.clone());
 //     let dex = Dex::new(

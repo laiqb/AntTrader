@@ -112,8 +112,8 @@ pub fn unix_nanos_to_iso8601(unix_nanos: UnixNanos) -> String {
 /// # Examples
 ///
 /// ```rust
-/// use nautilus_core::datetime::iso8601_to_unix_nanos;
-/// use nautilus_core::UnixNanos;
+/// use ant_core::datetime::iso8601_to_unix_nanos;
+/// use ant_core::UnixNanos;
 ///
 /// // Full RFC 3339 format
 /// let nanos = iso8601_to_unix_nanos("2024-02-10T14:58:43.456789Z".to_string())?;

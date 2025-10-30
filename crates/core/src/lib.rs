@@ -10,6 +10,10 @@ pub mod shared;
 pub mod time;
 pub mod math;
 pub mod consts;
+pub mod paths;
+pub mod env;
+pub mod ffi;
+pub mod parsing;
 
 pub use crate::{
     drop::CleanDrop,

@@ -1,0 +1,50 @@
+# ant-databento
+
+[![build](https://github.com/nautechsystems/ant_trader/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/nautechsystems/ant_trader/actions/workflows/build.yml)
+[![Documentation](https://img.shields.io/docsrs/ant-databento)](https://docs.rs/ant-databento/latest/ant-databento/)
+[![crates.io version](https://img.shields.io/crates/v/ant-databento.svg)](https://crates.io/crates/ant-databento)
+![license](https://img.shields.io/github/license/nautechsystems/ant_trader?color=blue)
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/antTrader)
+
+[antTrader](http://anttrader.io) adapter for [Databento](https://databento.com).
+
+The `ant-databento` crate provides a complete integration with the Databento API for
+accessing institutional-grade market data feeds across multiple venues and asset classes.
+
+## Platform
+
+[antTrader](http://anttrader.io) is an open-source, high-performance, production-grade
+algorithmic trading platform, providing quantitative traders with the ability to backtest
+portfolios of automated trading strategies on historical data with an event-driven engine,
+and also deploy those same strategies live, with no code changes.
+
+antTrader's design, architecture, and implementation philosophy prioritizes software correctness and safety at the
+highest level, with the aim of supporting mission-critical, trading system backtesting and live deployment workloads.
+
+## Feature Flags
+
+This crate provides feature flags to control source code inclusion during compilation:
+
+- `live` (default): Enables live data functionality including the `data`, `factories`, and `live` modules.
+- `python`: Enables Python bindings from [PyO3](https://pyo3.rs).
+- `extension-module`: Builds as a Python extension module (used with `python`).
+- `high-precision`: Enables [high-precision mode](https://anttrader.io/docs/nightly/getting_started/installation#precision-mode) to use 128-bit value types.
+
+## Documentation
+
+See [the docs](https://docs.rs/ant-databento) for more detailed usage.
+
+## License
+
+The source code for antTrader is available on GitHub under the [GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html).
+Contributions to the project are welcome and require the completion of a standard [Contributor License Agreement (CLA)](https://github.com/nautechsystems/ant_trader/blob/develop/CLA.md).
+
+---
+
+antTrader™ is developed and maintained by Nautech Systems, a technology
+company specializing in the development of high-performance trading systems.
+For more information, visit <https://anttrader.io>.
+
+<img src="https://anttrader.io/ant-logo-white.png" alt="logo" width="400" height="auto"/>
+
+<span style="font-size: 0.8em; color: #999;">© 2015-2025 Nautech Systems Pty Ltd. All rights reserved.</span>

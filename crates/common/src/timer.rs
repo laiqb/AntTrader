@@ -56,7 +56,7 @@ pub fn create_valid_interval(interval_ns: u64) -> NonZeroU64 {
 #[derive(Clone, Debug, Eq)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.common")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.common")
 )]
 /// Represents a time event occurring at the event timestamp.
 ///
@@ -136,7 +136,7 @@ impl Clone for TimeEventCallback {
     fn clone(&self) -> Self {
         match self {
             #[cfg(feature = "python")]
-            Self::Python(obj) => Self::Python(nautilus_core::python::clone_py_object(obj)),
+            Self::Python(obj) => Self::Python(ant_core::python::clone_py_object(obj)),
             Self::Rust(cb) => Self::Rust(cb.clone()),
         }
     }
@@ -564,7 +564,7 @@ impl LiveTimer {
 
 #[cfg(feature = "python")]
 fn call_python_with_time_event(event: TimeEvent, callback: &PyObject) {
-    use nautilus_core::python::IntoPyObjectNautilusExt;
+    use ant_core::python::IntoPyObjectantExt;
     use pyo3::types::PyCapsule;
 
     Python::with_gil(|py| {

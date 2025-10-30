@@ -34,14 +34,14 @@ use crate::{
     types::{Currency, Money, Price, Quantity},
 };
 
-/// Represents an event where an order was released from the `OrderEmulated` by the Nautilus system.
+/// Represents an event where an order was released from the `OrderEmulated` by the ant system.
 #[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, Builder)]
 #[builder(default)]
 #[serde(tag = "type")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct OrderReleased {
     /// The trader ID associated with the event.

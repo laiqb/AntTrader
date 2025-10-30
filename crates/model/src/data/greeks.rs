@@ -29,7 +29,7 @@ use crate::{data::HasTsInit, identifiers::InstrumentId};
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct BlackScholesGreeksResult {
     pub price: f64,
@@ -92,7 +92,7 @@ pub fn imply_vol(s: f64, r: f64, b: f64, is_call: bool, k: f64, t: f64, price: f
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct ImplyVolAndGreeksResult {
     pub vol: f64,

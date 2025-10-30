@@ -1,0 +1,102 @@
+[package]
+name = "ant-bitmex"
+readme = "README.md"
+publish = false  # Do not publish to crates.io yet
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+categories.workspace = true
+keywords.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+name = "ant_bitmex"
+crate-type = ["rlib", "cdylib"]
+#
+#[features]
+#default = []
+#extension-module = [
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-execution/extension-module",
+#  "ant-model/extension-module",
+#  "ant-network/extension-module",
+#  "pyo3/extension-module",
+#]
+#python = [
+#  "ant-common/python",
+#  "ant-core/python",
+#  "ant-execution/python",
+#  "ant-model/python",
+#  "ant-network/python",
+#  "pyo3",
+#  "pyo3-async-runtimes",
+#]
+#
+#[package.metadata.docs.rs]
+#all-features = true
+#rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+ant-common = { workspace = true }
+ant-core = { workspace = true }
+ant-execution = { workspace = true }
+ant-model = { workspace = true }
+ant-network = { workspace = true }
+ant-serialization = { workspace = true }
+
+ahash = { workspace = true }
+anyhow = { workspace = true }
+async-stream = { workspace = true }
+chrono = { workspace = true }
+dashmap = { workspace = true }
+derive_builder = { workspace = true }
+futures-util = { workspace = true }
+hex = { workspace = true }
+indexmap = { workspace = true }
+log = { workspace = true }
+pyo3 = { workspace = true, optional = true }
+pyo3-async-runtimes = { workspace = true, optional = true }
+reqwest = { workspace = true }
+aws-lc-rs = { workspace = true }
+rust_decimal = { workspace = true }
+rust_decimal_macros = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_urlencoded = { workspace = true }
+strum = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tokio-tungstenite = { workspace = true }
+tokio-util = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }  # Needed for example binaries
+ustr = { workspace = true }
+uuid = { workspace = true }
+zeroize = { workspace = true }
+
+[dev-dependencies]
+ant-testkit = { workspace = true }
+axum = { workspace = true }
+criterion = { workspace = true }
+http-body-util = { workspace = true }
+rstest = { workspace = true }
+tracing-test = { workspace = true }
+url = { workspace = true }
+
+[[bin]]
+name = "bitmex-http"
+path = "bin/http.rs"
+
+[[bin]]
+name = "bitmex-ws-data"
+path = "bin/ws-data.rs"
+
+[[bin]]
+name = "bitmex-ws-exec"
+path = "bin/ws-exec.rs"

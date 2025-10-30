@@ -28,7 +28,7 @@ use chrono::{DateTime, Utc};
 use indexmap::IndexMap;
 use ant_core::{UUID4, UnixNanos, correctness::check_predicate_true};
 #[cfg(feature = "defi")]
-use nautilus_model::defi::{Block, Blockchain, Pool, PoolLiquidityUpdate, PoolSwap};
+use ant_model::defi::{Block, Blockchain, Pool, PoolLiquidityUpdate, PoolSwap};
 use ant_model::{
     data::{
         Bar, BarType, DataType, FundingRateUpdate, IndexPriceUpdate, InstrumentStatus,
@@ -91,7 +91,7 @@ use crate::{
 #[derive(Debug, Clone)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.common", subclass)
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.common", subclass)
 )]
 pub struct DataActorConfig {
     /// The custom identifier for the Actor.
@@ -116,7 +116,7 @@ impl Default for DataActorConfig {
 #[derive(Debug, Clone)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.common")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.common")
 )]
 pub struct ImportableActorConfig {
     /// The fully qualified name of the Actor class.

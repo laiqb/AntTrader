@@ -63,7 +63,7 @@ pub trait FromU16 {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum AccountType {
     /// An account with unleveraged cash assets only.
@@ -95,12 +95,12 @@ pub enum AccountType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum AggregationSource {
-    /// The data is externally aggregated (outside the Nautilus system boundary).
+    /// The data is externally aggregated (outside the ant system boundary).
     External = 1,
-    /// The data is internally aggregated (inside the Nautilus system boundary).
+    /// The data is internally aggregated (inside the ant system boundary).
     Internal = 2,
 }
 
@@ -126,7 +126,7 @@ pub enum AggregationSource {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum AggressorSide {
     /// There was no specific aggressor for the trade.
@@ -170,7 +170,7 @@ impl FromU8 for AggressorSide {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 #[allow(non_camel_case_types)]
 pub enum AssetClass {
@@ -226,7 +226,7 @@ impl FromU8 for AssetClass {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum InstrumentClass {
     /// A spot market instrument class. The current market price of an instrument that is bought or sold for immediate delivery and payment.
@@ -277,7 +277,7 @@ pub enum InstrumentClass {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum BarAggregation {
     /// Based on a number of ticks.
@@ -338,7 +338,7 @@ pub enum BarAggregation {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum BarIntervalType {
     /// Left-open interval `(start, end]`: start is exclusive, end is inclusive (default).
@@ -369,7 +369,7 @@ pub enum BarIntervalType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum BetSide {
     /// A "Back" bet signifies support for a specific outcome.
@@ -425,7 +425,7 @@ impl From<OrderSide> for BetSide {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum BookAction {
     /// An order is added to the book.
@@ -472,7 +472,7 @@ impl FromU8 for BookAction {
 #[allow(non_camel_case_types)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum BookType {
     /// Top-of-book best bid/ask, one level per side.
@@ -518,7 +518,7 @@ impl FromU8 for BookType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum ContingencyType {
     /// Not a contingent order.
@@ -553,7 +553,7 @@ pub enum ContingencyType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum CurrencyType {
     /// A type of cryptocurrency or crypto token.
@@ -585,7 +585,7 @@ pub enum CurrencyType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum InstrumentCloseType {
     /// When the market session ended.
@@ -626,7 +626,7 @@ impl FromU8 for InstrumentCloseType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 #[allow(clippy::enum_variant_names)]
 pub enum LiquiditySide {
@@ -659,7 +659,7 @@ pub enum LiquiditySide {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum MarketStatus {
     /// The instrument is trading.
@@ -697,7 +697,7 @@ pub enum MarketStatus {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum MarketStatusAction {
     /// No change.
@@ -781,7 +781,7 @@ impl FromU16 for MarketStatusAction {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum OmsType {
     /// There is no specific type of order management specified (will defer to the venue OMS).
@@ -791,7 +791,7 @@ pub enum OmsType {
     Netting = 1,
     /// The hedging type where there can be multiple positions per instrument.
     /// This can be in LONG/SHORT directions, by position/ticket ID, or tracked virtually by
-    /// Nautilus.
+    /// ant.
     Hedging = 2,
 }
 
@@ -816,7 +816,7 @@ pub enum OmsType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum OptionKind {
     /// A Call option gives the holder the right, but not the obligation, to buy an underlying asset at a specified strike price within a specified period of time.
@@ -848,7 +848,7 @@ pub enum OptionKind {
 #[allow(clippy::enum_variant_names)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum OrderSide {
     /// No order side is specified.
@@ -975,18 +975,18 @@ impl OrderSideSpecified {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum OrderStatus {
-    /// The order is initialized (instantiated) within the Nautilus system.
+    /// The order is initialized (instantiated) within the ant system.
     Initialized = 1,
-    /// The order was denied by the Nautilus system, either for being invalid, unprocessable or exceeding a risk limit.
+    /// The order was denied by the ant system, either for being invalid, unprocessable or exceeding a risk limit.
     Denied = 2,
-    /// The order became emulated by the Nautilus system in the `OrderEmulator` component.
+    /// The order became emulated by the ant system in the `OrderEmulator` component.
     Emulated = 3,
-    /// The order was released by the Nautilus system from the `OrderEmulator` component.
+    /// The order was released by the ant system from the `OrderEmulator` component.
     Released = 4,
-    /// The order was submitted by the Nautilus system to the external service or trading venue (awaiting acknowledgement).
+    /// The order was submitted by the ant system to the external service or trading venue (awaiting acknowledgement).
     Submitted = 5,
     /// The order was acknowledged by the trading venue as being received and valid (may now be working).
     Accepted = 6,
@@ -1029,7 +1029,7 @@ pub enum OrderStatus {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum OrderType {
     /// A market order to buy or sell at the best available price in the current market.
@@ -1075,7 +1075,7 @@ pub enum OrderType {
 #[allow(clippy::enum_variant_names)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum PositionSide {
     /// No position side is specified (only valid in the context of a filter for actions involving positions).
@@ -1128,7 +1128,7 @@ impl PositionSide {
 #[allow(clippy::enum_variant_names)]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum PositionSideSpecified {
     /// A neural/flat position, where no position is currently held in the market.
@@ -1172,7 +1172,7 @@ impl PositionSideSpecified {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum PriceType {
     /// The best quoted price at which buyers are willing to buy a quantity of an instrument.
@@ -1211,7 +1211,7 @@ pub enum PriceType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 #[allow(non_camel_case_types)]
 pub enum RecordFlag {
@@ -1258,7 +1258,7 @@ impl RecordFlag {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum TimeInForce {
     /// Good Till Cancel (GTC) - Remains active until canceled.
@@ -1298,7 +1298,7 @@ pub enum TimeInForce {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum TradingState {
     /// Normal trading operations.
@@ -1331,7 +1331,7 @@ pub enum TradingState {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum TrailingOffsetType {
     /// No trailing offset type is specified (invalid for trailing type orders).
@@ -1369,7 +1369,7 @@ pub enum TrailingOffsetType {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.model.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.model.enums")
 )]
 pub enum TriggerType {
     /// No trigger type is specified (invalid for orders with a trigger).

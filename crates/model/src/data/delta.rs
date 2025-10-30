@@ -37,7 +37,7 @@ use crate::{
 #[serde(tag = "type")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.model")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.model")
 )]
 pub struct OrderBookDelta {
     /// The instrument ID for the book.

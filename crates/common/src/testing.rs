@@ -55,7 +55,7 @@ pub fn init_logger_for_testing(stdout_level: Option<log::LevelFilter>) -> anyhow
 /// ```
 /// use std::time::Duration;
 /// use std::thread;
-/// use nautilus_common::testing::wait_until;
+/// use ant_common::testing::wait_until;
 ///
 /// let start_time = std::time::Instant::now();
 /// let timeout = Duration::from_secs(5);

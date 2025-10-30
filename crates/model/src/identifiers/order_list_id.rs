@@ -13,7 +13,7 @@
 //  limitations under the License.
 // -------------------------------------------------------------------------------------------------
 
-//! Represents a valid order list ID (assigned by the Nautilus system).
+//! Represents a valid order list ID (assigned by the ant system).
 
 use std::{
     fmt::{Debug, Display, Formatter},
@@ -23,7 +23,7 @@ use std::{
 use ant_core::correctness::{FAILED, check_valid_string};
 use ustr::Ustr;
 
-/// Represents a valid order list ID (assigned by the Nautilus system).
+/// Represents a valid order list ID (assigned by the ant system).
 #[repr(C)]
 #[derive(Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(

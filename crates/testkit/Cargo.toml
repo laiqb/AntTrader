@@ -1,0 +1,53 @@
+[package]
+name = "ant-testkit"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+categories.workspace = true
+keywords.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+name = "ant_testkit"
+crate-type = ["rlib", "staticlib"]
+#
+#[features]
+#default = []
+#extension-module = [
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-model/extension-module",
+#  "pyo3/extension-module",
+#]
+#python = [
+#  "ant-common/python",
+#  "ant-core/python",
+#  "ant-model/python",
+#  "pyo3",
+#]
+#high-precision = ["ant-model/high-precision"]
+
+[dependencies]
+ant-common = { workspace = true }
+ant-core = { workspace = true }
+ant-model = { workspace = true }
+
+anyhow = { workspace = true }
+hex = { workspace = true }
+pyo3 = { workspace = true, optional = true }
+reqwest = { workspace = true }
+serde_json = { workspace = true }
+aws-lc-rs = { workspace = true }
+rand = { workspace = true }
+tokio = { workspace = true }
+
+[dev-dependencies]
+axum = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }

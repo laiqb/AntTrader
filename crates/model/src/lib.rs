@@ -12,6 +12,7 @@ pub mod orders;
 pub mod events;
 pub mod accounts;
 
+pub mod reports;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
@@ -24,3 +25,5 @@ pub mod stubs;
 
 #[cfg(feature = "defi")]
 pub mod defi;
+
+pub use enums::{RecordFlag};

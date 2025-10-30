@@ -54,7 +54,7 @@ static LOGGER_HANDLE: Mutex<Option<std::thread::JoinHandle<()>>> = Mutex::new(No
 
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.common")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.common")
 )]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LoggerConfig {
@@ -147,13 +147,13 @@ impl LoggerConfig {
         Ok(config)
     }
 
-    /// Retrieves the logger configuration from the "`NAUTILUS_LOG`" environment variable.
+    /// Retrieves the logger configuration from the "`ant_LOG`" environment variable.
     ///
     /// # Errors
     ///
     /// Returns an error if the variable is unset or invalid.
     pub fn from_env() -> anyhow::Result<Self> {
-        let spec = env::var("NAUTILUS_LOG")?;
+        let spec = env::var("ant_LOG")?;
         Self::from_spec(&spec)
     }
 }
@@ -191,7 +191,7 @@ pub struct LogLine {
     pub level: Level,
     /// The color for the log message content.
     pub color: LogColor,
-    /// The Nautilus system component the log event originated from.
+    /// The ant system component the log event originated from.
     pub component: Ustr,
     /// The log message content.
     pub message: String,
@@ -356,7 +356,7 @@ impl Log for Logger {
 
 #[allow(clippy::too_many_arguments)]
 impl Logger {
-    /// Initializes the logger based on the `NAUTILUS_LOG` environment variable.
+    /// Initializes the logger based on the `ant_LOG` environment variable.
     ///
     /// # Errors
     ///
@@ -653,7 +653,7 @@ pub fn log<T: AsRef<str>>(level: LogLevel, color: LogColor, component: Ustr, mes
 /// The system supports a maximum of 255 concurrent `LogGuard` instances.
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(module = "nautilus_trader.core.nautilus_pyo3.common")
+    pyo3::pyclass(module = "ant_trader.core.ant_pyo3.common")
 )]
 #[derive(Debug)]
 pub struct LogGuard {
