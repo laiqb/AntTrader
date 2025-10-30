@@ -1,5 +1,5 @@
 [package]
-name = "ant-system"
+name = "ant-trading"
 readme = "README.md"
 version.workspace = true
 edition.workspace = true
@@ -14,17 +14,31 @@ repository.workspace = true
 homepage.workspace = true
 
 [lib]
-name = "ant_system"
+name = "ant_trading"
 crate-type = ["rlib", "cdylib"]
 #
 #[features]
 #default = []
-#extension-module = ["pyo3/extension-module"]
-#python = ["pyo3"]
-#
-#[package.metadata.docs.rs]
-#all-features = true
-#rustdoc-args = ["--cfg", "docsrs"]
+#extension-module = [
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-data/extension-module",
+#  "ant-execution/extension-module",
+#  "ant-model/extension-module",
+#  "pyo3/extension-module",
+#]
+#python = [
+#  "ant-common/python",
+#  "ant-core/python",
+#  "ant-data/python",
+#  "ant-execution/python",
+#  "ant-model/python",
+#  "pyo3",
+#]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 ant-common = { workspace = true }
@@ -32,16 +46,15 @@ ant-core = { workspace = true }
 ant-data = { workspace = true }
 ant-execution = { workspace = true }
 ant-model = { workspace = true}
-ant-persistence = { workspace = true }
 ant-portfolio = { workspace = true }
 ant-risk = { workspace = true }
-ant-trading = { workspace = true }
 
 anyhow = { workspace = true }
-futures = { workspace = true }
-hostname = { workspace = true }
+chrono = { workspace = true }
+chrono-tz = { workspace = true }
 log = { workspace = true }
 pyo3 = { workspace = true, optional = true }
+strum = { workspace = true }
 ustr = { workspace = true }
 
 [dev-dependencies]

@@ -1,5 +1,5 @@
 [workspace.package]
-name = "base_backend"
+name = "ant_trader"
 version = "0.50.0"
 edition = "2024"
 rust-version = "1.89.0"
@@ -15,8 +15,7 @@ repository = ""
 [workspace]
 resolver = "2"
 members = [
-    "crates",
-    "crates",
+#    "crates",
     "crates/adapters/bitmex",
     "crates/adapters/blockchain",
     "crates/adapters/coinbase_intx",
@@ -41,7 +40,8 @@ members = [
     "crates/persistence",
     "crates/portfolio",
     "crates/risk",
-    "crates/analysis"
+    "crates/analysis",
+    "crates/trading",
 ]
 
 [workspace.dependencies]
@@ -71,6 +71,7 @@ ant-persistence = {path = "crates/persistence", version = "0.50.0"}
 ant-portfolio = {path = "crates/portfolio", version = "0.50.0"}
 ant-risk = {path = "crates/risk", version = "0.50.0"}
 ant-analysis = {path = "crates/analysis", version = "0.50.0"}
+ant-trading = {path = "crates/trading", version = "0.50.0"}
 
 ahash = "0.8.12"
 alloy = { version = "1.0.30", default-features = false, features = ["sol-types", "contract"] }
