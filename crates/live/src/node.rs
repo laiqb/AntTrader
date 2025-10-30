@@ -110,7 +110,7 @@ impl LiveNodeHandle {
 )]
 pub struct LiveNode {
     clock: Rc<RefCell<LiveClock>>,
-    kernel: antKernel,
+    kernel: AntKernel,
     runner: AsyncRunner,
     config: LiveNodeConfig,
     is_running: bool,
@@ -151,7 +151,7 @@ impl LiveNode {
         config.environment = Environment::Live;
 
         // Validate environment for live trading
-        match config.environment() {
+        match config.environment {
             Environment::Sandbox | Environment::Live => {}
             Environment::Backtest => {
                 anyhow::bail!("LiveNode cannot be used with Backtest environment");
@@ -160,7 +160,7 @@ impl LiveNode {
 
         let runner = AsyncRunner::new();
         let clock = Rc::new(RefCell::new(LiveClock::default()));
-        let kernel = antKernel::new(name, config.clone())?;
+        let kernel = AntKernel::new(name, config.clone())?;
 
         log::info!("LiveNode built successfully with kernel config");
 
@@ -265,13 +265,13 @@ impl LiveNode {
 
     /// Gets a reference to the underlying kernel.
     #[must_use]
-    pub const fn kernel(&self) -> &antKernel {
+    pub const fn kernel(&self) -> &AntKernel {
         &self.kernel
     }
 
     /// Gets an exclusive reference to the underlying kernel.
     #[must_use]
-    pub(crate) const fn kernel_mut(&mut self) -> &mut antKernel {
+    pub(crate) const fn kernel_mut(&mut self) -> &mut AntKernel {
         &mut self.kernel
     }
 
@@ -532,7 +532,7 @@ impl LiveNodeBuilder {
 
         let runner = AsyncRunner::new();
         let clock = Rc::new(RefCell::new(LiveClock::default()));
-        let kernel = antKernel::new("LiveNode".to_string(), self.config.clone())?;
+        let kernel = AntKernel::new("LiveNode".to_string(), self.config.clone())?;
 
         // Create and register data clients
         for (name, factory) in self.data_client_factories {

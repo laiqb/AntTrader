@@ -36,7 +36,7 @@ thread_local! {
     static MESSAGE_BUS: OnceCell<Rc<RefCell<MessageBus>>> = const { OnceCell::new() };
 }
 
-fn set_message_bus(msgbus: Rc<RefCell<MessageBus>>){
+pub fn set_message_bus(msgbus: Rc<RefCell<MessageBus>>){
     MESSAGE_BUS.with(|bus|{
         if bus.set(msgbus).is_err(){
             panic!("Faild to set MessageBus: already initialized for this thread");

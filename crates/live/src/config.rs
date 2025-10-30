@@ -266,7 +266,7 @@ impl Default for LiveNodeConfig {
     }
 }
 
-impl antKernelConfig for LiveNodeConfig {
+impl AntKernelConfig for LiveNodeConfig {
     fn environment(&self) -> Environment {
         self.environment
     }

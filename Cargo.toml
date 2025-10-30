@@ -17,7 +17,7 @@ resolver = "2"
 members = [
 #    "crates",
     "crates/adapters/bitmex",
-    "crates/adapters/blockchain",
+#    "crates/adapters/blockchain",
     "crates/adapters/coinbase_intx",
     "crates/adapters/databento",
     "crates/adapters/hyperliquid",
@@ -45,7 +45,7 @@ members = [
 ]
 
 [workspace.dependencies]
-ant-blockchain = { path = "crates/adapters/blockchain", version = "0.50.0" }
+#ant-blockchain = { path = "crates/adapters/blockchain", version = "0.50.0" }
 ant-coinbase-intx = { path = "crates/adapters/coinbase_intx", version = "0.50.0" }
 ant-bitmex = { path = "crates/adapters/bitmex", version = "0.50.0" }
 ant-databento = { path = "crates/adapters/databento", version = "0.50.0" }
