@@ -48,10 +48,10 @@ Contributions to the project are welcome and require the completion of a standar
 
 ---
 
-antTrader™ is developed and maintained by Nautech Systems, a technology
+antTrader™ is developed and maintained by ANT Systems, a technology
 company specializing in the development of high-performance trading systems.
 For more information, visit <https://anttrader.io>.
 
 <img src="https://anttrader.io/ant-logo-white.png" alt="logo" width="400" height="auto"/>
 
-<span style="font-size: 0.8em; color: #999;">© 2015-2025 Nautech Systems Pty Ltd. All rights reserved.</span>
+<span style="font-size: 0.8em; color: #999;">© 2015-2025 ANT Systems Pty Ltd. All rights reserved.</span>

@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------------------------------
-//  Copyright (C) 2015-2025 Nautech Systems Pty Ltd. All rights reserved.
-//  https://nautechsystems.io
+//  Copyright (C) 2015-2025 ANT Systems Pty Ltd. All rights reserved.
+//
 //
 //  Licensed under the GNU Lesser General Public License Version 3.0 (the "License");
 //  You may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ pub fn log_header(trader_id: TraderId, machine_id: &str, instance_id: UUID4, com
 
     header_sepr(c, "=================================================================");
     header_sepr(c, " ant TRADER - Automated Algorithmic Trading Platform");
-    header_sepr(c, " by Nautech Systems Pty Ltd.");
+    header_sepr(c, " by ANT Systems Pty Ltd.");
     header_sepr(c, " Copyright (C) 2015-2025. All rights reserved.");
     header_sepr(c, "=================================================================");
     header_line(c, "");
