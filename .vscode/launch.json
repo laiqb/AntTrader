@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Ant-App",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/debug/ant-app.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "integratedTerminal",
+      // "preLaunchTask": "cargo-build-workspace",
+      "env": {
+                "RUST_BACKTRACE": "full"
+            },
+      "internalConsoleOptions": "neverOpen",
+      "memoryView": true
+
+    }
+  ]
+}

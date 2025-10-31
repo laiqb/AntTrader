@@ -73,7 +73,6 @@ ant-portfolio = {path = "crates/portfolio", version = "0.50.0"}
 ant-risk = {path = "crates/risk", version = "0.50.0"}
 ant-analysis = {path = "crates/analysis", version = "0.50.0"}
 ant-trading = {path = "crates/trading", version = "0.50.0"}
-ant-app = {path = "crates/app", version = "0.50.0"}
 
 ahash = "0.8.12"
 alloy = { version = "1.0.30", default-features = false, features = ["sol-types", "contract"] }
