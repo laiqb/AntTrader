@@ -42,6 +42,7 @@ members = [
     "crates/risk",
     "crates/analysis",
     "crates/trading",
+    "crates/app",
 ]
 
 [workspace.dependencies]
@@ -72,6 +73,7 @@ ant-portfolio = {path = "crates/portfolio", version = "0.50.0"}
 ant-risk = {path = "crates/risk", version = "0.50.0"}
 ant-analysis = {path = "crates/analysis", version = "0.50.0"}
 ant-trading = {path = "crates/trading", version = "0.50.0"}
+ant-app = {path = "crates/app", version = "0.50.0"}
 
 ahash = "0.8.12"
 alloy = { version = "1.0.30", default-features = false, features = ["sol-types", "contract"] }
@@ -251,8 +253,11 @@ turmoil = "0.6.6"
 # build-dependencies
 cbindgen = "0.29.0"
 
-
-
+dioxus = { version = "0.5", features = ["desktop"]}  # Dioxus 核心 + Web 特性
+dioxus-desktop = "0.5"
+#dioxus-web = "0.5"                               # Web 渲染后端（WASM 支持）
+#wasm-bindgen = "0.2"                             # Rust 与 JS 交互
+#web-sys = { version = "0.3", features = ["console"] }  # 浏览器 API 绑定（可选）
 
 # 配置不同的环境参数
 [profile.dev]
