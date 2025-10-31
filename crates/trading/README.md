@@ -1,20 +1,20 @@
-# nautilus-trading
+# 
 
 [![build](https://github.com/nautechsystems/nautilus_trader/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/nautechsystems/nautilus_trader/actions/workflows/build.yml)
-[![Documentation](https://img.shields.io/docsrs/nautilus-trading)](https://docs.rs/nautilus-trading/latest/nautilus-trading/)
-[![crates.io version](https://img.shields.io/crates/v/nautilus-trading.svg)](https://crates.io/crates/nautilus-trading)
+[![Documentation](https://img.shields.io/docsrs/)](https://docs.rs//latest//)
+[![crates.io version](https://img.shields.io/crates/v/.svg)](https://crates.io/crates/)
 ![license](https://img.shields.io/github/license/nautechsystems/nautilus_trader?color=blue)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/NautilusTrader)
 
-Trading strategy machinery and orchestration for [NautilusTrader](http://nautilustrader.io).
+Trading strategy machinery and orchestration for [).
 
-The `nautilus-trading` crate provides core trading capabilities including:
+The `` crate provides core trading capabilities including:
 
 - **Forex sessions**: Market session time calculations and timezone handling.
 
 ## Platform
 
-[NautilusTrader](http://nautilustrader.io) is an open-source, high-performance, production-grade
+is an open-source, high-performance, production-grade
 algorithmic trading platform, providing quantitative traders with the ability to backtest
 portfolios of automated trading strategies on historical data with an event-driven engine,
 and also deploy those same strategies live, with no code changes.
@@ -26,7 +26,7 @@ highest level, with the aim of supporting mission-critical, trading system backt
 
 This crate provides feature flags to control source code inclusion during compilation,
 depending on the intended use case, i.e. whether to provide Python bindings
-for the [nautilus_trader](https://pypi.org/project/nautilus_trader) Python package,
+for the (https://pypi.org/project/nautilus_trader) Python package,
 or as part of a Rust only build.
 
 - `python`: Enables Python bindings from [PyO3](https://pyo3.rs).
@@ -34,7 +34,7 @@ or as part of a Rust only build.
 
 ## Documentation
 
-See [the docs](https://docs.rs/nautilus-trading) for more detailed usage.
+See [the docs](https://docs.rs/) for more detailed usage.
 
 ## License
 

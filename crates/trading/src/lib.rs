@@ -13,15 +13,15 @@
 //  limitations under the License.
 // -------------------------------------------------------------------------------------------------
 
-//! Trading strategy machinery and orchestration [NautilusTrader](http://nautilustrader.io).
+//! Trading strategy machinery and orchestration [).
 //!
-//! The `nautilus-trading` crate provides core trading capabilities including:
+//! The `` crate provides core trading capabilities including:
 //!
 //! - **Forex sessions**: Market session time calculations and timezone handling.
 //!
 //! # Platform
 //!
-//! [NautilusTrader](http://nautilustrader.io) is an open-source, high-performance, production-grade
+//! is an open-source, high-performance, production-grade
 //! algorithmic trading platform, providing quantitative traders with the ability to backtest
 //! portfolios of automated trading strategies on historical data with an event-driven engine,
 //! and also deploy those same strategies live, with no code changes.
@@ -33,7 +33,7 @@
 //!
 //! This crate provides feature flags to control source code inclusion during compilation,
 //! depending on the intended use case, i.e. whether to provide Python bindings
-//! for the [nautilus_trader](https://pypi.org/project/nautilus_trader) Python package,
+//! for the (https://pypi.org/project/nautilus_trader) Python package,
 //! or as part of a Rust only build.
 //!
 //! - `python`: Enables Python bindings from [PyO3](https://pyo3.rs).

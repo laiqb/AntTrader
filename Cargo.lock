@@ -181,8 +181,10 @@ dependencies = [
 name = "ant-app"
 version = "0.50.0"
 dependencies = [
+ "ant-model",
  "dioxus",
  "dioxus-desktop",
+ "serde",
 ]
 
 [[package]]
