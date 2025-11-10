@@ -48,8 +48,8 @@ pub fn black_scholes_greeks(
     b: f64,
     sigma: f64,
     is_call: bool,
-    k: f64,
-    t: f64,
+    k: f64, // 执行价
+    t: f64, // 距离到期日的剩余时间，以年计算
     multiplier: f64,
 ) -> BlackScholesGreeksResult {
     let phi = if is_call { 1.0 } else { -1.0 };

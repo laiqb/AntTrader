@@ -1,20 +1,26 @@
-# 
+# ant-backtest
 
 [![build](https://github.com/nautechsystems/ant_trader/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/nautechsystems/ant_trader/actions/workflows/build.yml)
-[![Documentation](https://img.shields.io/docsrs/)](https://docs.rs//latest//)
-[![crates.io version](https://img.shields.io/crates/v/.svg)](https://crates.io/crates/)
+[![Documentation](https://img.shields.io/docsrs/ant-backtest)](https://docs.rs/ant-backtest/latest/ant-backtest/)
+[![crates.io version](https://img.shields.io/crates/v/ant-backtest.svg)](https://crates.io/crates/ant-backtest)
 ![license](https://img.shields.io/github/license/nautechsystems/ant_trader?color=blue)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/NautilusTrader)
 
-Trading strategy machinery and orchestration for [).
+Backtest engine for [NautilusTrader](http://anttrader.io).
 
-The `` crate provides core trading capabilities including:
+The `ant-backtest` crate provides a comprehensive event-driven backtesting framework that allows
+quantitative traders to test and validate trading strategies on historical data with high
+fidelity market simulation. The system replicates real market conditions including:
 
-- **Forex sessions**: Market session time calculations and timezone handling.
+- Event-driven backtesting engine with simulated exchanges.
+- Market data replay with configurable latency and fill models.
+- Order matching engines with realistic execution simulation.
+- Multi-venue and multi-asset backtesting capabilities.
+- Comprehensive configuration and state management.
 
 ## Platform
 
-is an open-source, high-performance, production-grade
+[NautilusTrader](http://anttrader.io) is an open-source, high-performance, production-grade
 algorithmic trading platform, providing quantitative traders with the ability to backtest
 portfolios of automated trading strategies on historical data with an event-driven engine,
 and also deploy those same strategies live, with no code changes.
@@ -26,15 +32,16 @@ highest level, with the aim of supporting mission-critical, trading system backt
 
 This crate provides feature flags to control source code inclusion during compilation,
 depending on the intended use case, i.e. whether to provide Python bindings
-for the (https://pypi.org/project/ant_trader) Python package,
+for the [ant_trader](https://pypi.org/project/ant_trader) Python package,
 or as part of a Rust only build.
 
+- `ffi`: Enables the C foreign function interface (FFI) from [cbindgen](https://github.com/mozilla/cbindgen).
 - `python`: Enables Python bindings from [PyO3](https://pyo3.rs).
-- `extension-module`: Builds the crate as a Python extension module.
+- `extension-module`: Builds as a Python extension module (used with `python`).
 
 ## Documentation
 
-See [the docs](https://docs.rs/) for more detailed usage.
+See [the docs](https://docs.rs/ant-backtest) for more detailed usage.
 
 ## License
 

@@ -92,7 +92,7 @@ name = "tardis-replay"
 path = "bin/example_replay.rs"
 required-features = ["replay"]
 
-# Run with `cargo run --bin stream_deltas_bench --profile bench`
+# Run with `cargo run --bin stream_deltas_bench --profile benches`
 [[bin]]
 name = "stream_deltas_bench"
 path = "bin/stream_deltas_bench.rs"

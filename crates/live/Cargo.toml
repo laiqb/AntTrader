@@ -76,7 +76,7 @@ criterion = { workspace = true }
 rstest = { workspace = true }
 ustr = { workspace = true }
 
-# Run with `cargo bench -p ant-live --bench runner`
+# Run with `cargo benches -p ant-live --benches runner`
 [[bench]]
 name = "runner"
 harness = false

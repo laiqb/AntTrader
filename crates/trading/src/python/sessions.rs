@@ -16,8 +16,8 @@
 use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
-use nautilus_core::python::to_pyvalue_err;
-use nautilus_model::python::common::EnumIterator;
+use ant_core::python::to_pyvalue_err;
+use ant_model::python::common::EnumIterator;
 use pyo3::{PyTypeInfo, prelude::*, types::PyType};
 
 use crate::sessions::{

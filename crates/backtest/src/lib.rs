@@ -13,24 +13,27 @@
 //  limitations under the License.
 // -------------------------------------------------------------------------------------------------
 
-//! System-level components and orchestration for [AntTrader](http://anttrader.io).
+//! Backtest engine for [NautilusTrader](http://anttrader.io).
 //!
-//! The `Ant-system` crate provides the core system architecture for orchestrating trading systems,
-//! including the kernel that manages all engines, configuration management,
-//! and system-level factories for creating components:
+//! The `ant-backtest` crate provides a comprehensive event-driven backtesting framework that allows
+//! quantitative traders to test and validate trading strategies on historical data with high
+//! fidelity market simulation. The system replicates real market conditions including:
 //!
-//! - `AntKernel` - Core system orchestrator managing engines and components.
-//! - `AntKernelConfig` - Configuration for kernel initialization.
-//! - System builders and factories for component creation.
+//! - Event-driven backtesting engine with simulated exchanges.
+//! - Market data replay with configurable latency and fill models.
+//! - Order matching engines with realistic execution simulation.
+//! - Multi-venue and multi-asset backtesting capabilities.
+//! - Comprehensive configuration and state management.
+//! - Integration with live trading systems for seamless deployment.
 //!
 //! # Platform
 //!
-//! [AntTrader](http://anttrader.io) is an open-source, high-performance, production-grade
+//! [NautilusTrader](http://anttrader.io) is an open-source, high-performance, production-grade
 //! algorithmic trading platform, providing quantitative traders with the ability to backtest
 //! portfolios of automated trading strategies on historical data with an event-driven engine,
 //! and also deploy those same strategies live, with no code changes.
 //!
-//! AntTrader's design, architecture, and implementation philosophy prioritizes software correctness and safety at the
+//! NautilusTrader's design, architecture, and implementation philosophy prioritizes software correctness and safety at the
 //! highest level, with the aim of supporting mission-critical, trading system backtesting and live deployment workloads.
 //!
 //! # Feature flags
@@ -40,30 +43,27 @@
 //! for the [ant_trader](https://pypi.org/project/ant_trader) Python package,
 //! or as part of a Rust only build.
 //!
+//! - `ffi`: Enables the C foreign function interface (FFI) from [cbindgen](https://github.com/mozilla/cbindgen).
 //! - `python`: Enables Python bindings from [PyO3](https://pyo3.rs).
 //! - `extension-module`: Builds the crate as a Python extension module.
 
 #![warn(rustc::all)]
 #![deny(unsafe_code)]
+#![deny(unsafe_op_in_unsafe_fn)]
 #![deny(nonstandard_style)]
 #![deny(missing_debug_implementations)]
 #![deny(clippy::missing_errors_doc)]
 #![deny(clippy::missing_panics_doc)]
 #![deny(rustdoc::broken_intra_doc_links)]
 
-pub mod builder;
+pub mod accumulator;
 pub mod config;
-pub mod factories;
-pub mod kernel;
-pub mod trader;
+pub mod data_client;
+pub mod data_iterator;
+pub mod engine;
+pub mod exchange;
+pub mod execution_client;
+pub mod modules;
 
-#[cfg(feature = "python")]
-pub mod python;
-
-// Re-exports
-pub use builder::AntKernelBuilder;
-pub use config::AntKernelConfig;
-pub use factories::{ClientConfig, DataClientFactory, ExecutionClientFactory};
-pub use kernel::AntKernel;
-#[cfg(feature = "python")]
-pub use python::{FactoryRegistry, get_global_pyo3_registry};
+#[cfg(feature = "ffi")]
+pub mod ffi;

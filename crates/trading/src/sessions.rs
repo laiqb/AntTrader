@@ -34,7 +34,7 @@ use strum::{Display, EnumIter, EnumString, FromRepr};
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 #[cfg_attr(
     feature = "python",
-    pyo3::pyclass(eq, eq_int, module = "nautilus_trader.core.nautilus_pyo3.common.enums")
+    pyo3::pyclass(eq, eq_int, module = "ant_trader.core.ant_pyo3.common.enums")
 )]
 pub enum ForexSession {
     Sydney,

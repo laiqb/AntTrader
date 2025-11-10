@@ -33,7 +33,7 @@
 //!
 //! This crate provides feature flags to control source code inclusion during compilation,
 //! depending on the intended use case, i.e. whether to provide Python bindings
-//! for the (https://pypi.org/project/nautilus_trader) Python package,
+//! for the (https://pypi.org/project/ant_trader) Python package,
 //! or as part of a Rust only build.
 //!
 //! - `python`: Enables Python bindings from [PyO3](https://pyo3.rs).

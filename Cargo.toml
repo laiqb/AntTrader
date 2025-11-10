@@ -41,8 +41,8 @@ members = [
     "crates/portfolio",
     "crates/risk",
     "crates/analysis",
-    "crates/trading",
-    "crates/app",
+    "crates/trading", "crates/option",
+#    "crates/app", "crates/adapters/ashare", "crates/adapters/ctp",
 ]
 
 [workspace.dependencies]
@@ -248,6 +248,7 @@ rstest = "0.26.1"
 tempfile = "3.22.0"
 tracing-test = "0.2.5"
 turmoil = "0.6.6"
+statrs = "0.17"
 
 # build-dependencies
 cbindgen = "0.29.0"

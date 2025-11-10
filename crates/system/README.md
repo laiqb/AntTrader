@@ -5,7 +5,7 @@
 [![crates.io version](https://img.shields.io/crates/v/Ant-system.svg)](https://crates.io/crates/Ant-system)
 ![license](https://img.shields.io/github/license/nautechsystems/ant_trader?color=blue)
 
-System-level components and orchestration for [AntTrader](http://nautilustrader.io).
+System-level components and orchestration for [AntTrader](http://anttrader.io).
 
 The `Ant-system` crate provides the core system architecture for orchestrating trading systems,
 including the kernel that manages all engines, configuration management,
@@ -17,7 +17,7 @@ and system-level factories for creating components:
 
 ## Platform
 
-[AntTrader](http://nautilustrader.io) is an open-source, high-performance, production-grade
+[AntTrader](http://anttrader.io) is an open-source, high-performance, production-grade
 algorithmic trading platform, providing quantitative traders with the ability to backtest
 portfolios of automated trading strategies on historical data with an event-driven engine,
 and also deploy those same strategies live, with no code changes.
@@ -48,8 +48,8 @@ Contributions to the project are welcome and require the completion of a standar
 
 AntTrader™ is developed and maintained by ANT Systems, a technology
 company specializing in the development of high-performance trading systems.
-For more information, visit <https://nautilustrader.io>.
+For more information, visit <https://anttrader.io>.
 
-<img src="https://nautilustrader.io/Ant-logo-white.png" alt="logo" width="400" height="auto"/>
+<img src="https://anttrader.io/Ant-logo-white.png" alt="logo" width="400" height="auto"/>
 
 <span style="font-size: 0.8em; color: #999;">© 2015-2025 ANT Systems Pty Ltd. All rights reserved.</span>
