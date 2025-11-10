@@ -15,7 +15,7 @@
 
 use ant_model::{
     enums::LiquiditySide,
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderAny},
     types::{Money, Price, Quantity},
 };
@@ -32,7 +32,7 @@ pub trait FeeModel {
         order: &OrderAny,
         fill_quantity: Quantity,
         fill_px: Price,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
     ) -> anyhow::Result<Money>;
 }
 
@@ -48,7 +48,7 @@ impl FeeModel for FeeModelAny {
         order: &OrderAny,
         fill_quantity: Quantity,
         fill_px: Price,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
     ) -> anyhow::Result<Money> {
         match self {
             Self::Fixed(model) => model.get_commission(order, fill_quantity, fill_px, instrument),
@@ -97,7 +97,7 @@ impl FeeModel for FixedFeeModel {
         order: &OrderAny,
         _fill_quantity: Quantity,
         _fill_px: Price,
-        _instrument: &InstrumentAny,
+        _instrument: &InstrumentEnum,
     ) -> anyhow::Result<Money> {
         if !self.change_commission_once || order.filled_qty().is_zero() {
             Ok(self.commission)
@@ -116,7 +116,7 @@ impl FeeModel for MakerTakerFeeModel {
         order: &OrderAny,
         fill_quantity: Quantity,
         fill_px: Price,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
     ) -> anyhow::Result<Money> {
         let notional = instrument.calculate_notional_value(fill_quantity, fill_px, Some(false));
         let commission = match order.liquidity_side() {
@@ -136,7 +136,7 @@ impl FeeModel for MakerTakerFeeModel {
 mod tests {
     use ant_model::{
         enums::{LiquiditySide, OrderSide, OrderType},
-        instruments::{Instrument, InstrumentAny, stubs::audusd_sim},
+        instruments::{Instrument, InstrumentEnum, stubs::audusd_sim},
         orders::{
             Order,
             builder::OrderTestBuilder,
@@ -151,7 +151,7 @@ mod tests {
     #[rstest]
     fn test_fixed_model_single_fill() {
         let expected_commission = Money::new(1.0, Currency::USD());
-        let aud_usd = InstrumentAny::CurrencyPair(audusd_sim());
+        let aud_usd = InstrumentEnum::CurrencyPair(audusd_sim());
         let fee_model = FixedFeeModel::new(expected_commission, None).unwrap();
         let market_order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(aud_usd.id())
@@ -181,7 +181,7 @@ mod tests {
         #[case] expected_first_fill: Money,
         #[case] expected_next_fill: Money,
     ) {
-        let aud_usd = InstrumentAny::CurrencyPair(audusd_sim());
+        let aud_usd = InstrumentEnum::CurrencyPair(audusd_sim());
         let fee_model =
             FixedFeeModel::new(expected_first_fill, Some(charge_commission_once)).unwrap();
         let market_order = OrderTestBuilder::new(OrderType::Market)
@@ -226,7 +226,7 @@ mod tests {
     #[rstest]
     fn test_maker_taker_fee_model_maker_commission() {
         let fee_model = MakerTakerFeeModel;
-        let aud_usd = InstrumentAny::CurrencyPair(audusd_sim());
+        let aud_usd = InstrumentEnum::CurrencyPair(audusd_sim());
         let maker_fee = aud_usd.maker_fee();
         let price = Price::from("1.0");
         let limit_order = OrderTestBuilder::new(OrderType::Limit)
@@ -246,7 +246,7 @@ mod tests {
     #[rstest]
     fn test_maker_taker_fee_model_taker_commission() {
         let fee_model = MakerTakerFeeModel;
-        let aud_usd = InstrumentAny::CurrencyPair(audusd_sim());
+        let aud_usd = InstrumentEnum::CurrencyPair(audusd_sim());
         let taker_fee = aud_usd.taker_fee();
         let price = Price::from("1.0");
         let limit_order = OrderTestBuilder::new(OrderType::Limit)

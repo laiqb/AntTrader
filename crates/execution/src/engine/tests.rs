@@ -36,7 +36,7 @@ use ant_model::{
         AccountId, ClientId, ClientOrderId, InstrumentId, OrderListId, PositionId, StrategyId,
         TradeId, TraderId, Venue, VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny, stubs::audusd_sim},
+    instruments::{Instrument, InstrumentEnum, stubs::audusd_sim},
     orders::{Order, OrderList, builder::OrderTestBuilder, stubs::TestOrderEventStubs},
     position::Position,
     stubs::stub_position_long,
@@ -7371,7 +7371,7 @@ fn test_own_book_with_contingent_orders() {
 
     let entry_filled_event = TestOrderEventStubs::filled(
         &cached_entry_order,
-        &InstrumentAny::CurrencyPair(instrument),
+        &InstrumentEnum::CurrencyPair(instrument),
         None, // trade_id
         None, // position_id
         None, // last_px
@@ -7548,7 +7548,7 @@ fn test_own_book_order_status_filtering_parameterized(
 
                 let event = TestOrderEventStubs::filled(
                     &cached_order,
-                    &InstrumentAny::CurrencyPair(instrument),
+                    &InstrumentEnum::CurrencyPair(instrument),
                     None,                         // trade_id
                     None,                         // position_id
                     None,                         // last_px
@@ -7572,7 +7572,7 @@ fn test_own_book_order_status_filtering_parameterized(
 
                 let event = TestOrderEventStubs::filled(
                     &cached_order,
-                    &InstrumentAny::CurrencyPair(instrument),
+                    &InstrumentEnum::CurrencyPair(instrument),
                     None, // trade_id
                     None, // position_id
                     None, // last_px
@@ -7850,7 +7850,7 @@ fn test_own_book_combined_status_filtering() {
 
     let partial_filled_event = TestOrderEventStubs::filled(
         &cached_partial_order,
-        &InstrumentAny::CurrencyPair(instrument),
+        &InstrumentEnum::CurrencyPair(instrument),
         None,                         // trade_id
         None,                         // position_id
         None,                         // last_px
@@ -8068,7 +8068,7 @@ fn test_own_book_status_integrity_during_transitions() {
 
     let partial_fill_event = TestOrderEventStubs::filled(
         &cached_order_1,
-        &InstrumentAny::CurrencyPair(instrument),
+        &InstrumentEnum::CurrencyPair(instrument),
         None,                         // trade_id
         Some(PositionId::new("1")),   // position_id
         None,                         // last_px
@@ -8163,7 +8163,7 @@ fn test_own_book_status_integrity_during_transitions() {
 
     let first_partial_fill = TestOrderEventStubs::filled(
         &cached_order_0,
-        &InstrumentAny::CurrencyPair(instrument),
+        &InstrumentEnum::CurrencyPair(instrument),
         Some(TradeId::new("001")),    // trade_id
         None,                         // position_id
         None,                         // last_px
@@ -8209,7 +8209,7 @@ fn test_own_book_status_integrity_during_transitions() {
 
     let complete_fill = TestOrderEventStubs::filled(
         &cached_order_0_updated,
-        &InstrumentAny::CurrencyPair(instrument),
+        &InstrumentEnum::CurrencyPair(instrument),
         Some(TradeId::new("002")),    // trade_id
         None,                         // position_id
         None,                         // last_px

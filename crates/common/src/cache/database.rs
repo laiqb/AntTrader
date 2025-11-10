@@ -30,7 +30,7 @@ use ant_model::{
         AccountId, ClientId, ClientOrderId, ComponentId, InstrumentId, PositionId, StrategyId,
         VenueOrderId,
     },
-    instruments::{InstrumentAny, SyntheticInstrument},
+    instruments::{InstrumentEnum, SyntheticInstrument},
     orderbook::OrderBook,
     orders::OrderAny,
     position::Position,
@@ -43,7 +43,7 @@ use crate::{custom::CustomData, signal::Signal};
 #[derive(Debug, Default)]
 pub struct CacheMap {
     pub currencies: AHashMap<Ustr, Currency>,
-    pub instruments: AHashMap<InstrumentId, InstrumentAny>,
+    pub instruments: AHashMap<InstrumentId, InstrumentEnum>,
     pub synthetics: AHashMap<InstrumentId, SyntheticInstrument>,
     pub accounts: AHashMap<AccountId, AccountAny>,
     pub orders: AHashMap<ClientOrderId, OrderAny>,
@@ -94,7 +94,7 @@ pub trait CacheDatabaseAdapter {
     /// # Errors
     ///
     /// Returns an error if loading instruments fails.
-    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentAny>>;
+    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentEnum>>;
 
     /// Loads all synthetic instruments from the cache.
     ///
@@ -171,7 +171,7 @@ pub trait CacheDatabaseAdapter {
     async fn load_instrument(
         &self,
         instrument_id: &InstrumentId,
-    ) -> anyhow::Result<Option<InstrumentAny>>;
+    ) -> anyhow::Result<Option<InstrumentEnum>>;
 
     /// Loads a single synthetic instrument by ID.
     ///
@@ -293,7 +293,7 @@ pub trait CacheDatabaseAdapter {
     /// # Errors
     ///
     /// Returns an error if adding an instrument fails.
-    fn add_instrument(&self, instrument: &InstrumentAny) -> anyhow::Result<()>;
+    fn add_instrument(&self, instrument: &InstrumentEnum) -> anyhow::Result<()>;
 
     /// Adds a synthetic instrument to the cache.
     ///

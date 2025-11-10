@@ -23,7 +23,7 @@ use ant_common::{cache::database::CacheMap, enums::SerializationEncoding};
 use ant_model::{
     accounts::AccountAny,
     identifiers::{AccountId, ClientOrderId, InstrumentId, PositionId},
-    instruments::{InstrumentAny, SyntheticInstrument},
+    instruments::{InstrumentEnum, SyntheticInstrument},
     orders::OrderAny,
     position::Position,
     types::Currency,
@@ -302,7 +302,7 @@ impl DatabaseQueries {
         con: &ConnectionManager,
         trader_key: &str,
         encoding: SerializationEncoding,
-    ) -> anyhow::Result<AHashMap<InstrumentId, InstrumentAny>> {
+    ) -> anyhow::Result<AHashMap<InstrumentId, InstrumentEnum>> {
         let mut instruments = AHashMap::new();
         let pattern = format!("{trader_key}{REDIS_DELIMITER}{INSTRUMENTS}*");
         tracing::debug!("Loading {pattern}");
@@ -626,14 +626,14 @@ impl DatabaseQueries {
         trader_key: &str,
         instrument_id: &InstrumentId,
         encoding: SerializationEncoding,
-    ) -> anyhow::Result<Option<InstrumentAny>> {
+    ) -> anyhow::Result<Option<InstrumentEnum>> {
         let key = format!("{INSTRUMENTS}{REDIS_DELIMITER}{instrument_id}");
         let result = Self::read(con, trader_key, &key).await?;
         if result.is_empty() {
             return Ok(None);
         }
 
-        let instrument: InstrumentAny = Self::deserialize_payload(encoding, &result[0])?;
+        let instrument: InstrumentEnum = Self::deserialize_payload(encoding, &result[0])?;
         Ok(Some(instrument))
     }
 

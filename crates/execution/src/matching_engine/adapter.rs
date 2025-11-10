@@ -22,7 +22,7 @@ use ant_common::{cache::Cache, clock::Clock};
 use ant_core::WeakCell;
 use ant_model::{
     enums::{AccountType, BookType, OmsType},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
 };
 
 use crate::{
@@ -43,7 +43,7 @@ pub struct OrderEngineAdapter {
 impl OrderEngineAdapter {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         raw_id: u32,
         fill_model: FillModel,
         fee_model: FeeModelAny,

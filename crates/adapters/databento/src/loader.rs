@@ -30,7 +30,7 @@ use indexmap::IndexMap;
 use ant_model::{
     data::{Bar, Data, InstrumentStatus, OrderBookDelta, OrderBookDepth10, QuoteTick, TradeTick},
     identifiers::{InstrumentId, Symbol, Venue},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     types::Currency,
 };
 
@@ -200,12 +200,12 @@ impl DatabentoDataLoader {
         &mut self,
         filepath: &Path,
         use_exchange_as_venue: bool,
-    ) -> anyhow::Result<impl Iterator<Item = anyhow::Result<InstrumentAny>> + '_> {
+    ) -> anyhow::Result<impl Iterator<Item = anyhow::Result<InstrumentEnum>> + '_> {
         let decoder = Decoder::from_zstd_file(filepath)?;
         let mut dbn_stream = decoder.decode_stream::<InstrumentDefMsg>();
 
         Ok(std::iter::from_fn(move || {
-            let result: anyhow::Result<Option<InstrumentAny>> = (|| {
+            let result: anyhow::Result<Option<InstrumentEnum>> = (|| {
                 dbn_stream
                     .advance()
                     .map_err(|e| anyhow::anyhow!("Stream advance error: {e}"))?;
@@ -337,7 +337,7 @@ impl DatabentoDataLoader {
         &mut self,
         filepath: &Path,
         use_exchange_as_venue: bool,
-    ) -> anyhow::Result<Vec<InstrumentAny>> {
+    ) -> anyhow::Result<Vec<InstrumentEnum>> {
         self.read_definition_records(filepath, use_exchange_as_venue)?
             .collect::<Result<Vec<_>, _>>()
     }

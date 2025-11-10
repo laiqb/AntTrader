@@ -35,7 +35,7 @@ use ant_core::{
 use ant_model::{
     data::{Data, bar::BarType},
     identifiers::{AccountId, InstrumentId},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
 };
 use ant_network::{
     RECONNECTED,
@@ -84,7 +84,7 @@ pub struct BitmexWebSocketClient {
     signal: Arc<AtomicBool>,
     task_handle: Option<Arc<tokio::task::JoinHandle<()>>>,
     subscriptions: Arc<DashMap<String, AHashSet<Ustr>>>,
-    instruments_cache: Arc<AHashMap<Ustr, InstrumentAny>>,
+    instruments_cache: Arc<AHashMap<Ustr, InstrumentEnum>>,
     account_id: AccountId,
 }
 
@@ -178,8 +178,8 @@ impl BitmexWebSocketClient {
     }
 
     /// Initialize the instruments cache with the given `instruments`.
-    pub fn initialize_instruments_cache(&mut self, instruments: Vec<InstrumentAny>) {
-        let mut instruments_cache: AHashMap<Ustr, InstrumentAny> = AHashMap::new();
+    pub fn initialize_instruments_cache(&mut self, instruments: Vec<InstrumentEnum>) {
+        let mut instruments_cache: AHashMap<Ustr, InstrumentEnum> = AHashMap::new();
         for inst in instruments {
             // TODO laiqb check instruments_cache.insert(inst.symbol().inner(), inst.clone());
         }
@@ -1233,7 +1233,7 @@ impl BitmexFeedHandler {
 struct BitmexWsMessageHandler {
     handler: BitmexFeedHandler,
     tx: tokio::sync::mpsc::UnboundedSender<AntWsMessage>,
-    instruments_cache: Arc<AHashMap<Ustr, InstrumentAny>>,
+    instruments_cache: Arc<AHashMap<Ustr, InstrumentEnum>>,
     #[allow(dead_code)] // May be needed for future account-specific processing
     account_id: AccountId,
 }
@@ -1244,7 +1244,7 @@ impl BitmexWsMessageHandler {
         receiver: tokio::sync::mpsc::UnboundedReceiver<Message>,
         signal: Arc<AtomicBool>,
         tx: tokio::sync::mpsc::UnboundedSender<AntWsMessage>,
-        instruments_cache: Arc<AHashMap<Ustr, InstrumentAny>>,
+        instruments_cache: Arc<AHashMap<Ustr, InstrumentEnum>>,
         account_id: AccountId,
     ) -> Self {
         let handler = BitmexFeedHandler::new(receiver, signal);

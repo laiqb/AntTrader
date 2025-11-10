@@ -29,7 +29,7 @@ use ant_model::{
     data::{Data, InstrumentStatus, OrderBookDelta, OrderBookDeltas, OrderBookDeltas_API},
     enums::RecordFlag,
     identifiers::{InstrumentId, Symbol, Venue},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
 };
 use tokio::{sync::mpsc::error::TryRecvError, time::Duration};
 
@@ -53,7 +53,7 @@ pub enum LiveCommand {
 #[allow(clippy::large_enum_variant)] // TODO: Optimize this (largest variant 1096 vs 80 bytes)
 pub enum LiveMessage {
     Data(Data),
-    Instrument(InstrumentAny),
+    Instrument(InstrumentEnum),
     Status(InstrumentStatus),
     Imbalance(DatabentoImbalance),
     Statistics(DatabentoStatistics),
@@ -552,7 +552,7 @@ fn handle_instrument_def_msg(
     symbol_venue_map: &AHashMap<Symbol, Venue>,
     instrument_id_map: &mut AHashMap<u32, InstrumentId>,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = update_instrument_id_map(
         record,
         symbol_map,

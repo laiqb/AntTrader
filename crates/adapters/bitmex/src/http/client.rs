@@ -41,7 +41,7 @@ use ant_model::{
     enums::{OrderSide, OrderType, TimeInForce},
     events::AccountState,
     identifiers::{AccountId, ClientOrderId, InstrumentId, VenueOrderId},
-    instruments::{Instrument as InstrumentTrait, InstrumentAny},
+    instruments::{Instrument as InstrumentTrait, InstrumentEnum},
     reports::{FillReport, OrderStatusReport, PositionStatusReport},
     types::{Price, Quantity},
 };
@@ -660,7 +660,7 @@ impl BitmexHttpInnerClient {
 )]
 pub struct BitmexHttpClient {
     inner: Arc<BitmexHttpInnerClient>,
-    instruments_cache: Arc<Mutex<AHashMap<Ustr, InstrumentAny>>>,
+    instruments_cache: Arc<Mutex<AHashMap<Ustr, InstrumentEnum>>>,
 }
 
 impl Default for BitmexHttpClient {
@@ -810,7 +810,7 @@ impl BitmexHttpClient {
     /// # Panics
     ///
     /// Panics if the instruments cache mutex is poisoned.
-    pub fn add_instrument(&mut self, instrument: InstrumentAny) {
+    pub fn add_instrument(&mut self, instrument: InstrumentEnum) {
         // TODO laiqb check
         // self.instruments_cache
         //     .lock()
@@ -826,7 +826,7 @@ impl BitmexHttpClient {
     pub async fn request_instrument(
         &self,
         instrument_id: InstrumentId,
-    ) -> anyhow::Result<Option<InstrumentAny>> {
+    ) -> anyhow::Result<Option<InstrumentEnum>> {
         let response = self
             .inner
             .http_get_instrument(instrument_id.symbol.as_str())
@@ -845,7 +845,7 @@ impl BitmexHttpClient {
     pub async fn request_instruments(
         &self,
         active_only: bool,
-    ) -> anyhow::Result<Vec<InstrumentAny>> {
+    ) -> anyhow::Result<Vec<InstrumentEnum>> {
         let instruments = self.inner.http_get_instruments(active_only).await?;
         let ts_init = self.generate_ts_init();
 

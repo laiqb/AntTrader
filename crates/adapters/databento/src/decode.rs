@@ -28,7 +28,7 @@ use ant_model::{
     },
     identifiers::{InstrumentId, TradeId},
     instruments::{
-        Equity, FuturesContract, FuturesSpread, InstrumentAny, OptionContract, OptionSpread,
+        Equity, FuturesContract, FuturesSpread, InstrumentEnum, OptionContract, OptionSpread,
     },
     types::{Currency, Price, Quantity, price::decode_raw_price_i64},
 };
@@ -985,29 +985,29 @@ pub fn decode_instrument_def_msg(
     msg: &dbn::InstrumentDefMsg,
     instrument_id: InstrumentId,
     ts_init: Option<UnixNanos>,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     match msg.instrument_class as u8 as char {
-        'K' => Ok(InstrumentAny::Equity(decode_equity(
+        'K' => Ok(InstrumentEnum::Equity(decode_equity(
             msg,
             instrument_id,
             ts_init,
         )?)),
-        'F' => Ok(InstrumentAny::FuturesContract(decode_futures_contract(
+        'F' => Ok(InstrumentEnum::FuturesContract(decode_futures_contract(
             msg,
             instrument_id,
             ts_init,
         )?)),
-        'S' => Ok(InstrumentAny::FuturesSpread(decode_futures_spread(
+        'S' => Ok(InstrumentEnum::FuturesSpread(decode_futures_spread(
             msg,
             instrument_id,
             ts_init,
         )?)),
-        'C' | 'P' => Ok(InstrumentAny::OptionContract(decode_option_contract(
+        'C' | 'P' => Ok(InstrumentEnum::OptionContract(decode_option_contract(
             msg,
             instrument_id,
             ts_init,
         )?)),
-        'T' | 'M' => Ok(InstrumentAny::OptionSpread(decode_option_spread(
+        'T' | 'M' => Ok(InstrumentEnum::OptionSpread(decode_option_spread(
             msg,
             instrument_id,
             ts_init,

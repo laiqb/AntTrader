@@ -15,7 +15,7 @@
 
 //! Position sizing calculation functions.
 use ant_model::{
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     types::{Money, Price, Quantity},
 };
 use rust_decimal::{
@@ -32,7 +32,7 @@ use rust_decimal::{
 #[must_use]
 #[allow(clippy::too_many_arguments)]
 pub fn calculate_fixed_risk_position_size(
-    instrument: InstrumentAny,
+    instrument: InstrumentEnum,
     entry: Price,
     stop_loss: Price,
     equity: Money,
@@ -85,7 +85,7 @@ pub fn calculate_fixed_risk_position_size(
 }
 
 // Helper functions
-fn calculate_risk_ticks(entry: Price, stop_loss: Price, instrument: &InstrumentAny) -> Decimal {
+fn calculate_risk_ticks(entry: Price, stop_loss: Price, instrument: &InstrumentEnum) -> Decimal {
     (entry - stop_loss).as_decimal().abs() / instrument.price_increment().as_decimal()
 }
 
@@ -112,12 +112,12 @@ mod tests {
     const EXCHANGE_RATE: Decimal = Decimal::ONE;
 
     #[fixture]
-    fn instrument_gbpusd() -> InstrumentAny {
-        InstrumentAny::CurrencyPair(default_fx_ccy(Symbol::from_str_unchecked("GBP/USD"), None))
+    fn instrument_gbpusd() -> InstrumentEnum {
+        InstrumentEnum::CurrencyPair(default_fx_ccy(Symbol::from_str_unchecked("GBP/USD"), None))
     }
 
     #[rstest]
-    fn test_calculate_with_zero_equity_returns_quantity_zero(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_with_zero_equity_returns_quantity_zero(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(0.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00100, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -139,7 +139,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_with_zero_exchange_rate(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_with_zero_exchange_rate(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(100000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00100, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -161,7 +161,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_with_zero_risk(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_with_zero_risk(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(100000.0, instrument_gbpusd.quote_currency());
         let price = Price::new(1.00100, instrument_gbpusd.price_precision());
 
@@ -182,7 +182,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_single_unit_size(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_single_unit_size(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00100, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -204,7 +204,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_single_unit_with_exchange_rate(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_single_unit_with_exchange_rate(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, Currency::USD());
         let entry = Price::new(110.010, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(110.000, instrument_gbpusd.price_precision());
@@ -226,7 +226,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_single_unit_size_when_risk_too_high(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_single_unit_size_when_risk_too_high(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(100000.0, Currency::USD());
         let entry = Price::new(3.00000, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -248,7 +248,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_impose_hard_limit(instrument_gbpusd: InstrumentAny) {
+    fn test_impose_hard_limit(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00010, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -270,7 +270,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_multiple_unit_size(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_multiple_unit_size(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00010, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -292,7 +292,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_multiple_unit_size_larger_batches(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_multiple_unit_size_larger_batches(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(1.00087, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(1.00000, instrument_gbpusd.price_precision());
@@ -314,7 +314,7 @@ mod tests {
     }
 
     #[rstest]
-    fn test_calculate_for_gbpusd_with_commission(instrument_gbpusd: InstrumentAny) {
+    fn test_calculate_for_gbpusd_with_commission(instrument_gbpusd: InstrumentEnum) {
         let equity = Money::new(1_000_000.0, instrument_gbpusd.quote_currency());
         let entry = Price::new(107.703, instrument_gbpusd.price_precision());
         let stop_loss = Price::new(107.403, instrument_gbpusd.price_precision());

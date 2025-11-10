@@ -33,7 +33,7 @@ use crate::{
     enums::{AccountType, LiquiditySide, OrderSide},
     events::{AccountState, OrderFilled},
     identifiers::{AccountId, InstrumentId},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     position::Position,
     types::{AccountBalance, Currency, MarginBalance, Money, Price, Quantity},
 };
@@ -390,7 +390,7 @@ impl Account for MarginAccount {
 
     fn calculate_balance_locked(
         &mut self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         side: OrderSide,
         quantity: Quantity,
         price: Price,
@@ -401,7 +401,7 @@ impl Account for MarginAccount {
 
     fn calculate_pnls(
         &self,
-        _instrument: InstrumentAny, // TBD if this should be removed
+        _instrument: InstrumentEnum, // TBD if this should be removed
         fill: OrderFilled,
         position: Option<Position>,
     ) -> anyhow::Result<Vec<Money>> {
@@ -426,7 +426,7 @@ impl Account for MarginAccount {
 
     fn calculate_commission(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         last_qty: Quantity,
         last_px: Price,
         liquidity_side: LiquiditySide,
@@ -490,7 +490,7 @@ mod tests {
             VenueOrderId,
             stubs::{uuid4, *},
         },
-        instruments::{CryptoPerpetual, CurrencyPair, InstrumentAny, stubs::*},
+        instruments::{CryptoPerpetual, CurrencyPair, InstrumentEnum, stubs::*},
         position::Position,
         types::{Currency, Money, Price, Quantity},
     };
@@ -735,7 +735,7 @@ mod tests {
 
         // Create BTCUSDT instrument
         let btcusdt = currency_pair_btcusdt();
-        let btcusdt_any = InstrumentAny::CurrencyPair(btcusdt);
+        let btcusdt_any = InstrumentEnum::CurrencyPair(btcusdt);
 
         // Create initial position with BUY 0.001 BTC at 50000.00
         let fill1 = OrderFilled::new(
@@ -810,7 +810,7 @@ mod tests {
                 AccountId, ClientOrderId, PositionId, StrategyId, TradeId, TraderId, VenueOrderId,
                 stubs::uuid4,
             },
-            instruments::InstrumentAny,
+            instruments::InstrumentEnum,
             position::Position,
             types::{Price, Quantity},
         };
@@ -821,7 +821,7 @@ mod tests {
 
         // Create BTCUSDT instrument
         let btcusdt = currency_pair_btcusdt();
-        let btcusdt_any = InstrumentAny::CurrencyPair(btcusdt);
+        let btcusdt_any = InstrumentEnum::CurrencyPair(btcusdt);
 
         // Create initial position with BUY 1.0 BTC at 50000.00
         let fill1 = OrderFilled::new(

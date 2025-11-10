@@ -34,7 +34,7 @@ use ant_model::{
     enums::{OrderSide, OrderType, TimeInForce},
     events::AccountState,
     identifiers::{AccountId, ClientOrderId, Symbol, VenueOrderId},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     reports::{FillReport, OrderStatusReport, PositionStatusReport},
     types::{Price, Quantity},
 };
@@ -582,7 +582,7 @@ impl CoinbaseIntxHttpInnerClient {
 )]
 pub struct CoinbaseIntxHttpClient {
     pub(crate) inner: Arc<CoinbaseIntxHttpInnerClient>,
-    pub(crate) instruments_cache: Arc<Mutex<HashMap<Ustr, InstrumentAny>>>,
+    pub(crate) instruments_cache: Arc<Mutex<HashMap<Ustr, InstrumentEnum>>>,
     cache_initialized: bool,
 }
 
@@ -647,7 +647,7 @@ impl CoinbaseIntxHttpClient {
         })
     }
 
-    fn get_instrument_from_cache(&self, symbol: Ustr) -> anyhow::Result<InstrumentAny> {
+    fn get_instrument_from_cache(&self, symbol: Ustr) -> anyhow::Result<InstrumentEnum> {
         match self.instruments_cache.lock().unwrap().get(&symbol) {
             Some(inst) => Ok(inst.clone()), // TODO: Remove this clone
             None => anyhow::bail!("Unable to process request, instrument {symbol} not in cache"),
@@ -700,7 +700,7 @@ impl CoinbaseIntxHttpClient {
     /// Panics if the instrument cache mutex is poisoned.
     ///
     /// Any existing instruments will be replaced.
-    pub fn add_instruments(&mut self, instruments: Vec<InstrumentAny>) {
+    pub fn add_instruments(&mut self, instruments: Vec<InstrumentEnum>) {
         // TODO Check
         // for inst in instruments {
         //     self.instruments_cache
@@ -718,7 +718,7 @@ impl CoinbaseIntxHttpClient {
     /// Panics if the instrument cache mutex is poisoned.
     ///
     /// Any existing instrument will be replaced.
-    pub fn add_instrument(&mut self, instrument: InstrumentAny) {
+    pub fn add_instrument(&mut self, instrument: InstrumentEnum) {
         // TODO  laiqb Check
 
         // self.instruments_cache
@@ -769,7 +769,7 @@ impl CoinbaseIntxHttpClient {
     /// # Errors
     ///
     /// Returns an error if the HTTP request fails or the response cannot be parsed.
-    pub async fn request_instruments(&self) -> anyhow::Result<Vec<InstrumentAny>> {
+    pub async fn request_instruments(&self) -> anyhow::Result<Vec<InstrumentEnum>> {
         let resp = self
             .inner
             .http_list_instruments()
@@ -778,7 +778,7 @@ impl CoinbaseIntxHttpClient {
 
         let ts_init = self.generate_ts_init();
 
-        let mut instruments: Vec<InstrumentAny> = Vec::new();
+        let mut instruments: Vec<InstrumentEnum> = Vec::new();
         for inst in &resp {
             let instrument_any = parse_instrument_any(inst, ts_init);
             if let Some(instrument_any) = instrument_any {
@@ -794,7 +794,7 @@ impl CoinbaseIntxHttpClient {
     /// # Errors
     ///
     /// Returns an error if the HTTP request fails or the instrument cannot be parsed.
-    pub async fn request_instrument(&self, symbol: &Symbol) -> anyhow::Result<InstrumentAny> {
+    pub async fn request_instrument(&self, symbol: &Symbol) -> anyhow::Result<InstrumentEnum> {
         let resp = self
             .inner
             .http_get_instrument_details(symbol.as_str())

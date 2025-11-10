@@ -28,7 +28,7 @@ use ant_model::{
     enums::{BookType, OmsType, OrderSide, OrderStatus, OrderType, PositionSide, PriceType},
     events::{OrderAccepted, OrderEventAny, OrderRejected, OrderSubmitted},
     identifiers::{AccountId, ClientOrderId, InstrumentId, PositionId, Symbol, Venue},
-    instruments::{CurrencyPair, Instrument, InstrumentAny, SyntheticInstrument, stubs::*},
+    instruments::{CurrencyPair, Instrument, InstrumentEnum, SyntheticInstrument, stubs::*},
     orderbook::OrderBook,
     orders::{
         Order,
@@ -365,7 +365,7 @@ fn test_position_ids_filtering(mut cache: Cache) {
 
     let fill_a_event = TestOrderEventStubs::filled(
         &base_order,
-        &InstrumentAny::CurrencyPair(instr_a0),
+        &InstrumentEnum::CurrencyPair(instr_a0),
         None,
         Some(PositionId::new("POS-A")),
         None,
@@ -379,7 +379,7 @@ fn test_position_ids_filtering(mut cache: Cache) {
         OrderEventAny::Filled(f) => f,
         _ => unreachable!(),
     };
-    let pos_a = Position::new(&InstrumentAny::CurrencyPair(instr_a0), fill_a);
+    let pos_a = Position::new(&InstrumentEnum::CurrencyPair(instr_a0), fill_a);
 
     // Second open position on venue B
     let order_b = OrderTestBuilder::new(OrderType::Market)
@@ -390,7 +390,7 @@ fn test_position_ids_filtering(mut cache: Cache) {
 
     let fill_b_event = TestOrderEventStubs::filled(
         &order_b,
-        &InstrumentAny::CurrencyPair(instr_b0),
+        &InstrumentEnum::CurrencyPair(instr_b0),
         None,
         Some(PositionId::new("POS-B")),
         None,
@@ -404,7 +404,7 @@ fn test_position_ids_filtering(mut cache: Cache) {
         OrderEventAny::Filled(f) => f,
         _ => unreachable!(),
     };
-    let pos_b = Position::new(&InstrumentAny::CurrencyPair(instr_b0), fill_b);
+    let pos_b = Position::new(&InstrumentEnum::CurrencyPair(instr_b0), fill_b);
 
     // Closed position on venue A (side Flat + ts_closed)
     let mut pos_closed = pos_a.clone();
@@ -444,7 +444,7 @@ fn test_position_ids_filtering(mut cache: Cache) {
 #[ignore = "Revisit on next pass"]
 #[rstest]
 fn test_order_when_filled(mut cache: Cache, audusd_sim: CurrencyPair) {
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
     let mut order = OrderTestBuilder::new(OrderType::Market)
         .instrument_id(audusd_sim.id())
         .side(OrderSide::Buy)
@@ -595,7 +595,7 @@ fn test_position_when_empty(cache: Cache) {
 
 #[rstest]
 fn test_position_when_some(mut cache: Cache, audusd_sim: CurrencyPair) {
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
     let order = OrderTestBuilder::new(OrderType::Market)
         .instrument_id(audusd_sim.id())
         .side(OrderSide::Buy)
@@ -660,11 +660,11 @@ fn test_instrument_when_empty(cache: Cache, audusd_sim: CurrencyPair) {
 #[rstest]
 fn test_instrument_when_some(mut cache: Cache, audusd_sim: CurrencyPair) {
     cache
-        .add_instrument(InstrumentAny::CurrencyPair(audusd_sim))
+        .add_instrument(InstrumentEnum::CurrencyPair(audusd_sim))
         .unwrap();
 
     let result = cache.instrument(&audusd_sim.id);
-    assert_eq!(result, Some(&InstrumentAny::CurrencyPair(audusd_sim)));
+    assert_eq!(result, Some(&InstrumentEnum::CurrencyPair(audusd_sim)));
 }
 
 #[rstest]
@@ -678,13 +678,13 @@ fn test_instruments_when_empty(cache: Cache) {
 fn test_instruments_when_some(mut cache: Cache) {
     let esz1 = futures_contract_es(None, None);
     cache
-        .add_instrument(InstrumentAny::FuturesContract(esz1))
+        .add_instrument(InstrumentEnum::FuturesContract(esz1))
         .unwrap();
 
     let result1 = cache.instruments(&esz1.id.venue, None);
     let result2 = cache.instruments(&esz1.id.venue, Some(&esz1.underlying));
-    assert_eq!(result1, vec![&InstrumentAny::FuturesContract(esz1)]);
-    assert_eq!(result2, vec![&InstrumentAny::FuturesContract(esz1)]);
+    assert_eq!(result1, vec![&InstrumentEnum::FuturesContract(esz1)]);
+    assert_eq!(result2, vec![&InstrumentEnum::FuturesContract(esz1)]);
 }
 
 #[rstest]
@@ -1153,7 +1153,7 @@ fn test_set_mark_xrate_panics_on_zero(mut cache: Cache) {
 fn test_purge_order() {
     let mut cache = Cache::default();
     let audusd_sim = audusd_sim();
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
 
     // Create an order and fill to generate a position
     let order = OrderTestBuilder::new(OrderType::Limit)
@@ -1202,7 +1202,7 @@ fn test_purge_order() {
 fn test_purge_position() {
     let mut cache = Cache::default();
     let audusd_sim = audusd_sim();
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
 
     // Create an order and fill to generate a position
     let order = OrderTestBuilder::new(OrderType::Market)

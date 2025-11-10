@@ -29,7 +29,7 @@ use crate::{
     enums::{AccountType, LiquiditySide},
     events::{AccountState, OrderFilled},
     identifiers::AccountId,
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     position::Position,
     types::{AccountBalance, Currency, Money, Price, Quantity},
 };
@@ -117,7 +117,7 @@ impl AccountAny {
     /// Returns an error if calculating P&Ls fails for the underlying account.
     pub fn calculate_pnls(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         fill: OrderFilled,
         position: Option<Position>,
     ) -> anyhow::Result<Vec<Money>> {
@@ -132,7 +132,7 @@ impl AccountAny {
     /// Returns an error if calculating commission fails for the underlying account.
     pub fn calculate_commission(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         last_qty: Quantity,
         last_px: Price,
         liquidity_side: LiquiditySide,

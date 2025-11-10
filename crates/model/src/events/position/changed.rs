@@ -126,7 +126,7 @@ mod tests {
             AccountId, ClientOrderId, InstrumentId, PositionId, StrategyId, TradeId, TraderId,
             VenueOrderId,
         },
-        instruments::{InstrumentAny, stubs::audusd_sim},
+        instruments::{InstrumentEnum, stubs::audusd_sim},
         position::Position,
         types::{Currency, Money, Price, Quantity},
     };
@@ -245,7 +245,7 @@ mod tests {
             Some(Money::new(2.0, Currency::USD())),
         );
 
-        let position = Position::new(&InstrumentAny::CurrencyPair(instrument), initial_fill);
+        let position = Position::new(&InstrumentEnum::CurrencyPair(instrument), initial_fill);
         let change_fill = create_test_order_filled();
         let event_id = Default::default();
         let ts_init = UnixNanos::from(3_000_000_000);

@@ -50,7 +50,7 @@ use ant_model::{
         AccountId, ClientOrderId, InstrumentId, PositionId, StrategyId, TraderId, Venue,
         VenueOrderId,
     },
-    instruments::{EXPIRING_INSTRUMENT_TYPES, Instrument, InstrumentAny},
+    instruments::{EXPIRING_INSTRUMENT_TYPES, Instrument, InstrumentEnum},
     orderbook::OrderBook,
     orders::{Order, OrderAny, PassiveOrderAny, StopOrderAny},
     position::Position,
@@ -73,7 +73,7 @@ pub struct OrderMatchingEngine {
     /// The venue for the matching engine.
     pub venue: Venue,
     /// The instrument for the matching engine.
-    pub instrument: InstrumentAny,
+    pub instrument: InstrumentEnum,
     /// The instruments raw integer ID for the venue.
     pub raw_id: u32,
     /// The order book type for the matching engine.
@@ -117,7 +117,7 @@ impl OrderMatchingEngine {
     /// Creates a new [`OrderMatchingEngine`] instance.
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         raw_id: u32,
         fill_model: FillModel,
         fee_model: FeeModelAny,
@@ -684,7 +684,7 @@ impl OrderMatchingEngine {
             // Check not shorting an equity without a MARGIN account
             if order.order_side() == OrderSide::Sell
                 && self.account_type != AccountType::Margin
-                && matches!(self.instrument, InstrumentAny::Equity(_))
+                && matches!(self.instrument, InstrumentEnum::Equity(_))
                 && (position.is_none()
                     || !order.would_reduce_only(position.unwrap().side, position.unwrap().quantity))
             {

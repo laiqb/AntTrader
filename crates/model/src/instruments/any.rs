@@ -26,7 +26,7 @@ use crate::types::{Price, Quantity};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[enum_dispatch(Instrument)]
-pub enum InstrumentAny {
+pub enum InstrumentEnum {
     Betting(BettingInstrument),
     BinaryOption(BinaryOption),
     CryptoFuture(CryptoFuture),
@@ -41,7 +41,7 @@ pub enum InstrumentAny {
 }
 
 // TODO: Probably move this to the `Instrument` trait too
-impl InstrumentAny {
+impl InstrumentEnum {
     #[must_use]
     pub fn get_base_quantity(&self, quantity: Quantity, last_px: Price) -> Quantity {
         match self {
@@ -66,7 +66,7 @@ impl InstrumentAny {
     }
 }
 
-impl PartialEq for InstrumentAny {
+impl PartialEq for InstrumentEnum {
     fn eq(&self, other: &Self) -> bool {
         self.id() == other.id()
     }

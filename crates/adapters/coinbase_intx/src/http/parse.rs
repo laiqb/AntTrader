@@ -20,7 +20,7 @@ use ant_model::{
     },
     events::AccountState,
     identifiers::{AccountId, ClientOrderId, Symbol, TradeId, VenueOrderId},
-    instruments::{CryptoPerpetual, CurrencyPair, any::InstrumentAny},
+    instruments::{CryptoPerpetual, CurrencyPair, any::InstrumentEnum},
     reports::{FillReport, OrderStatusReport, PositionStatusReport},
     types::{AccountBalance, Currency, Money, Price, Quantity},
 };
@@ -48,7 +48,7 @@ pub fn parse_spot_instrument(
     maker_fee: Option<Decimal>,
     taker_fee: Option<Decimal>,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::from_ustr_unchecked(definition.symbol);
 
@@ -92,7 +92,7 @@ pub fn parse_spot_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CurrencyPair(instrument))
+    Ok(InstrumentEnum::CurrencyPair(instrument))
 }
 
 /// Parses a Coinbase International perpetual instrument into an `InstrumentAny::CryptoPerpetual`.
@@ -108,7 +108,7 @@ pub fn parse_perp_instrument(
     maker_fee: Option<Decimal>,
     taker_fee: Option<Decimal>,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::from_ustr_unchecked(definition.symbol);
 
@@ -158,14 +158,14 @@ pub fn parse_perp_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CryptoPerpetual(instrument))
+    Ok(InstrumentEnum::CryptoPerpetual(instrument))
 }
 
 #[must_use]
 pub fn parse_instrument_any(
     instrument: &CoinbaseIntxInstrument,
     ts_init: UnixNanos,
-) -> Option<InstrumentAny> {
+) -> Option<InstrumentEnum> {
     let result = match instrument.instrument_type {
         CoinbaseIntxInstrumentType::Spot => {
             parse_spot_instrument(instrument, None, None, None, None, ts_init).map(Some)
@@ -462,7 +462,7 @@ mod tests {
         let ts_init = UnixNanos::default();
         let instrument = parse_spot_instrument(&parsed, None, None, None, None, ts_init).unwrap();
 
-        if let InstrumentAny::CurrencyPair(pair) = instrument {
+        if let InstrumentEnum::CurrencyPair(pair) = instrument {
             assert_eq!(pair.id.to_string(), "BTC-USDC.COINBASE_INTX");
             assert_eq!(pair.raw_symbol.to_string(), "BTC-USDC");
             assert_eq!(pair.base_currency.to_string(), "BTC");
@@ -498,7 +498,7 @@ mod tests {
         let ts_init = UnixNanos::default();
         let instrument = parse_perp_instrument(&parsed, None, None, None, None, ts_init).unwrap();
 
-        if let InstrumentAny::CryptoPerpetual(perp) = instrument {
+        if let InstrumentEnum::CryptoPerpetual(perp) = instrument {
             assert_eq!(perp.id.to_string(), "BTC-PERP.COINBASE_INTX");
             assert_eq!(perp.raw_symbol.to_string(), "BTC-PERP");
             assert_eq!(perp.base_currency.to_string(), "BTC");

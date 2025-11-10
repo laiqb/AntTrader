@@ -42,7 +42,7 @@ mod serial_tests {
             stubs::account_id,
         },
         instruments::{
-            Instrument, InstrumentAny,
+            Instrument, InstrumentEnum,
             stubs::{
                 audusd_sim, binary_option, crypto_future_btcusdt, crypto_perpetual_ethusdt,
                 currency_pair_ethusdt, equity_aapl, futures_contract_es, option_contract_appl,
@@ -121,25 +121,25 @@ mod serial_tests {
 
         // Insert all instruments
         pg_cache
-            .add_instrument(&InstrumentAny::BinaryOption(binary_option))
+            .add_instrument(&InstrumentEnum::BinaryOption(binary_option))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::CryptoFuture(crypto_future))
+            .add_instrument(&InstrumentEnum::CryptoFuture(crypto_future))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::CryptoPerpetual(crypto_perpetual))
+            .add_instrument(&InstrumentEnum::CryptoPerpetual(crypto_perpetual))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::CurrencyPair(currency_pair))
+            .add_instrument(&InstrumentEnum::CurrencyPair(currency_pair))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::Equity(equity))
+            .add_instrument(&InstrumentEnum::Equity(equity))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::FuturesContract(futures_contract))
+            .add_instrument(&InstrumentEnum::FuturesContract(futures_contract))
             .unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::OptionContract(option_contract))
+            .add_instrument(&InstrumentEnum::OptionContract(option_contract))
             .unwrap();
 
         // Wait for cache to update
@@ -230,7 +230,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::BinaryOption(binary_option)
+            InstrumentEnum::BinaryOption(binary_option)
         );
         assert_eq!(
             pg_cache
@@ -238,7 +238,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::CryptoFuture(crypto_future)
+            InstrumentEnum::CryptoFuture(crypto_future)
         );
         assert_eq!(
             pg_cache
@@ -246,7 +246,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::CryptoPerpetual(crypto_perpetual)
+            InstrumentEnum::CryptoPerpetual(crypto_perpetual)
         );
         assert_eq!(
             pg_cache
@@ -254,7 +254,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::CurrencyPair(currency_pair)
+            InstrumentEnum::CurrencyPair(currency_pair)
         );
         assert_eq!(
             pg_cache
@@ -262,7 +262,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::Equity(equity)
+            InstrumentEnum::Equity(equity)
         );
         assert_eq!(
             pg_cache
@@ -270,7 +270,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::FuturesContract(futures_contract)
+            InstrumentEnum::FuturesContract(futures_contract)
         );
         assert_eq!(
             pg_cache
@@ -278,7 +278,7 @@ mod serial_tests {
                 .await
                 .unwrap()
                 .unwrap(),
-            InstrumentAny::OptionContract(option_contract)
+            InstrumentEnum::OptionContract(option_contract)
         );
 
         // Check instrument list is correct
@@ -308,7 +308,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         // Add items in currency and instrument table
-        let instrument = InstrumentAny::CurrencyPair(audusd_sim());
+        let instrument = InstrumentEnum::CurrencyPair(audusd_sim());
         pg_cache
             .add_currency(&instrument.base_currency().unwrap())
             .unwrap();
@@ -364,7 +364,7 @@ mod serial_tests {
             .unwrap();
         pg_cache.add_currency(&instrument.quote_currency()).unwrap();
         pg_cache
-            .add_instrument(&InstrumentAny::CurrencyPair(instrument))
+            .add_instrument(&InstrumentEnum::CurrencyPair(instrument))
             .unwrap();
 
         // Set client id
@@ -429,7 +429,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         let client_order_id_1 = ClientOrderId::new("O-19700101-000000-001-002-1");
-        let instrument = InstrumentAny::CurrencyPair(currency_pair_ethusdt());
+        let instrument = InstrumentEnum::CurrencyPair(currency_pair_ethusdt());
         let account = account_id();
 
         // Add foreign key dependencies: instrument and currencies
@@ -548,7 +548,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         // Add target instrument and currencies
-        let instrument = InstrumentAny::CryptoPerpetual(crypto_perpetual_ethusdt());
+        let instrument = InstrumentEnum::CryptoPerpetual(crypto_perpetual_ethusdt());
         pg_cache
             .add_currency(&instrument.base_currency().unwrap())
             .unwrap();
@@ -583,7 +583,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         // Add target instrument and currencies
-        let instrument = InstrumentAny::CryptoPerpetual(crypto_perpetual_ethusdt());
+        let instrument = InstrumentEnum::CryptoPerpetual(crypto_perpetual_ethusdt());
         pg_cache
             .add_currency(&instrument.base_currency().unwrap())
             .unwrap();
@@ -618,7 +618,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         // Add target instrument and currencies
-        let instrument = InstrumentAny::CurrencyPair(audusd_sim());
+        let instrument = InstrumentEnum::CurrencyPair(audusd_sim());
         pg_cache
             .add_currency(&instrument.base_currency().unwrap())
             .unwrap();
@@ -710,7 +710,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         let client_order_id = ClientOrderId::new("O-19700101-000000-001-002-1");
-        let instrument = InstrumentAny::CurrencyPair(currency_pair_ethusdt());
+        let instrument = InstrumentEnum::CurrencyPair(currency_pair_ethusdt());
 
         // Add foreign key dependencies: instrument and currencies
         pg_cache
@@ -740,7 +740,7 @@ mod serial_tests {
         let mut pg_cache = get_pg_cache_database().await.unwrap();
 
         let client_order_id = ClientOrderId::new("O-19700101-000000-001-002-1");
-        let instrument = InstrumentAny::CurrencyPair(currency_pair_ethusdt());
+        let instrument = InstrumentEnum::CurrencyPair(currency_pair_ethusdt());
 
         // Add foreign key dependencies: instrument and currencies
         pg_cache

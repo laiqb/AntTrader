@@ -38,7 +38,7 @@ use ant_model::{
     enums::{OmsType, OrderSide, OrderType, PositionSide, PriceType},
     events::{AccountState, OrderEventAny, position::PositionEvent},
     identifiers::{AccountId, InstrumentId, PositionId, Venue},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderAny},
     position::Position,
     types::{Currency, Money, Price},
@@ -1555,7 +1555,7 @@ impl Portfolio {
 
     fn calculate_xrate_to_base(
         &self,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
         account: &AccountAny,
         side: OrderSide,
     ) -> Option<f64> {

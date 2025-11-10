@@ -428,7 +428,7 @@ mod tests {
             AccountId, ClientOrderId,
             stubs::{instrument_id_aud_usd_sim, strategy_id_ema_cross, trader_id},
         },
-        instruments::InstrumentAny,
+        instruments::InstrumentEnum,
         types::{AccountBalance, Money, Price, Quantity},
     };
     use rstest::rstest;
@@ -577,7 +577,7 @@ mod tests {
         }
         fn calculate_balance_locked(
             &mut self,
-            _: InstrumentAny,
+            _: InstrumentEnum,
             _: OrderSide,
             _: Quantity,
             _: Price,
@@ -587,7 +587,7 @@ mod tests {
         }
         fn calculate_pnls(
             &self,
-            _: InstrumentAny,
+            _: InstrumentEnum,
             _: OrderFilled,
             _: Option<Position>,
         ) -> Result<Vec<Money>, anyhow::Error> {
@@ -595,7 +595,7 @@ mod tests {
         }
         fn calculate_commission(
             &self,
-            _: InstrumentAny,
+            _: InstrumentEnum,
             _: Quantity,
             _: Price,
             _: LiquiditySide,

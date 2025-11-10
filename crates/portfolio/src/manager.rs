@@ -23,7 +23,7 @@ use ant_model::{
     accounts::{Account, AccountAny, CashAccount, MarginAccount},
     enums::{AccountType, OrderSide, OrderSideSpecified, PriceType},
     events::{AccountState, OrderFilled},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderAny},
     position::Position,
     types::{AccountBalance, Currency, Money},
@@ -59,7 +59,7 @@ impl AccountsManager {
     pub fn update_balances(
         &self,
         account: AccountAny,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         fill: OrderFilled,
     ) -> AccountState {
         let cache = self.cache.borrow();
@@ -111,7 +111,7 @@ impl AccountsManager {
     pub fn update_orders(
         &self,
         account: &AccountAny,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         orders_open: Vec<&OrderAny>,
         ts_event: UnixNanos,
     ) -> Option<(AccountAny, AccountState)> {
@@ -138,7 +138,7 @@ impl AccountsManager {
     pub fn update_positions(
         &self,
         account: &MarginAccount,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         positions: Vec<&Position>,
         ts_event: UnixNanos,
     ) -> Option<(MarginAccount, AccountState)> {
@@ -160,67 +160,67 @@ impl AccountsManager {
             }
 
             let margin_maint = match instrument {
-                InstrumentAny::Betting(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::Betting(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::BinaryOption(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::BinaryOption(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::CryptoFuture(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::CryptoFuture(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::CryptoOption(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::CryptoOption(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::CryptoPerpetual(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::CryptoPerpetual(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::CurrencyPair(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::CurrencyPair(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::Equity(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::Equity(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::FuturesContract(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::FuturesContract(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::FuturesSpread(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::FuturesSpread(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::OptionContract(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::OptionContract(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
                     None,
                 ),
-                InstrumentAny::OptionSpread(i) => account.calculate_maintenance_margin(
+                InstrumentEnum::OptionSpread(i) => account.calculate_maintenance_margin(
                     i,
                     position.quantity,
                     instrument.make_price(position.avg_px_open),
@@ -270,7 +270,7 @@ impl AccountsManager {
     fn update_balance_locked(
         &self,
         account: &CashAccount,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         orders_open: Vec<&OrderAny>,
         ts_event: UnixNanos,
     ) -> Option<(CashAccount, AccountState)> {
@@ -367,7 +367,7 @@ impl AccountsManager {
     fn update_margin_init(
         &self,
         account: &MarginAccount,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         orders_open: Vec<&OrderAny>,
         ts_event: UnixNanos,
     ) -> Option<(MarginAccount, AccountState)> {
@@ -399,37 +399,37 @@ impl AccountsManager {
             };
 
             let margin_init = match instrument {
-                InstrumentAny::Betting(i) => {
+                InstrumentEnum::Betting(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::BinaryOption(i) => {
+                InstrumentEnum::BinaryOption(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::CryptoFuture(i) => {
+                InstrumentEnum::CryptoFuture(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::CryptoOption(i) => {
+                InstrumentEnum::CryptoOption(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::CryptoPerpetual(i) => {
+                InstrumentEnum::CryptoPerpetual(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::CurrencyPair(i) => {
+                InstrumentEnum::CurrencyPair(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::Equity(i) => {
+                InstrumentEnum::Equity(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::FuturesContract(i) => {
+                InstrumentEnum::FuturesContract(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::FuturesSpread(i) => {
+                InstrumentEnum::FuturesSpread(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::OptionContract(i) => {
+                InstrumentEnum::OptionContract(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
-                InstrumentAny::OptionSpread(i) => {
+                InstrumentEnum::OptionSpread(i) => {
                     account.calculate_initial_margin(i, order.quantity(), price?, None)
                 }
             };
@@ -720,7 +720,7 @@ impl AccountsManager {
     fn calculate_xrate_to_base(
         &self,
         account: AccountAny,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         side: OrderSideSpecified,
     ) -> Option<f64> {
         match account.base_currency() {
@@ -752,7 +752,7 @@ mod tests {
         enums::{AccountType, OrderSide, OrderType},
         events::{AccountState, OrderAccepted, OrderEventAny, OrderSubmitted},
         identifiers::{AccountId, VenueOrderId},
-        instruments::{InstrumentAny, stubs::audusd_sim},
+        instruments::{InstrumentEnum, stubs::audusd_sim},
         orders::{OrderAny, OrderTestBuilder},
         types::{AccountBalance, Currency, Money, Price, Quantity},
     };
@@ -908,7 +908,7 @@ mod tests {
         // Act
         let result = manager.update_orders(
             &AccountAny::Cash(account.clone()),
-            InstrumentAny::CurrencyPair(instrument),
+            InstrumentEnum::CurrencyPair(instrument),
             orders,
             UnixNanos::default(),
         );

@@ -56,7 +56,7 @@ use ant_model::{
         AccountId, ClientId, ClientOrderId, ComponentId, ExecAlgorithmId, InstrumentId,
         OrderListId, PositionId, StrategyId, Venue, VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny, SyntheticInstrument},
+    instruments::{Instrument, InstrumentEnum, SyntheticInstrument},
     orderbook::{
         OrderBook,
         own::{OwnOrderBook, should_handle_own_book_order},
@@ -80,7 +80,7 @@ pub struct Cache {
     database: Option<Box<dyn CacheDatabaseAdapter>>,
     general: AHashMap<String, Bytes>,
     currencies: AHashMap<Ustr, Currency>,
-    instruments: AHashMap<InstrumentId, InstrumentAny>,
+    instruments: AHashMap<InstrumentId, InstrumentEnum>,
     synthetics: AHashMap<InstrumentId, SyntheticInstrument>,
     books: AHashMap<InstrumentId, OrderBook>,
     own_books: AHashMap<InstrumentId, OwnOrderBook>,
@@ -1499,7 +1499,7 @@ impl Cache {
     /// # Errors
     ///
     /// Returns an error if persisting the instrument to the backing database fails.
-    pub fn add_instrument(&mut self, instrument: InstrumentAny) -> anyhow::Result<()> {
+    pub fn add_instrument(&mut self, instrument: InstrumentEnum) -> anyhow::Result<()> {
         log::debug!("Adding `Instrument` {}", instrument.id());
 
         if let Some(database) = &mut self.database {
@@ -3206,7 +3206,7 @@ impl Cache {
 
     /// Returns a reference to the instrument for the `instrument_id` (if found).
     #[must_use]
-    pub fn instrument(&self, instrument_id: &InstrumentId) -> Option<&InstrumentAny> {
+    pub fn instrument(&self, instrument_id: &InstrumentId) -> Option<&InstrumentEnum> {
         self.instruments.get(instrument_id)
     }
 
@@ -3221,7 +3221,7 @@ impl Cache {
 
     /// Returns references to all instruments for the `venue`.
     #[must_use]
-    pub fn instruments(&self, venue: &Venue, underlying: Option<&Ustr>) -> Vec<&InstrumentAny> {
+    pub fn instruments(&self, venue: &Venue, underlying: Option<&Ustr>) -> Vec<&InstrumentEnum> {
         self.instruments
             .values()
             .filter(|i| &i.id().venue == venue)

@@ -55,7 +55,7 @@ use ant_model::{
     defi::{AmmType, Dex, DexType, chain::chains},
     enums::{BookType, PriceType},
     identifiers::{ClientId, InstrumentId, TraderId, Venue},
-    instruments::{CurrencyPair, Instrument, InstrumentAny, stubs::audusd_sim},
+    instruments::{CurrencyPair, Instrument, InstrumentEnum, stubs::audusd_sim},
     types::Price,
 };
 #[cfg(feature = "defi")]
@@ -448,7 +448,7 @@ fn test_execute_subscribe_book_snapshots(
         &mut data_engine,
     );
 
-    let inst_any = InstrumentAny::CurrencyPair(audusd_sim);
+    let inst_any = InstrumentEnum::CurrencyPair(audusd_sim);
     data_engine.process(&inst_any as &dyn Any);
 
     let sub = SubscribeBookSnapshots::new(
@@ -678,7 +678,7 @@ fn test_execute_subscribe_bars(
         &mut data_engine,
     );
 
-    let inst_any = InstrumentAny::CurrencyPair(audusd_sim);
+    let inst_any = InstrumentEnum::CurrencyPair(audusd_sim);
     data_engine.process(&inst_any as &dyn Any);
 
     let bar_type = BarType::from("AUD/USD.SIM-1-MINUTE-LAST-INTERNAL");
@@ -1168,7 +1168,7 @@ fn test_process_instrument(
     let venue = data_client.venue;
     data_engine.borrow_mut().register_client(data_client, None);
 
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
 
     let sub = SubscribeInstrument::new(
         audusd_sim.id(),
@@ -1183,14 +1183,14 @@ fn test_process_instrument(
     let endpoint = MessagingSwitchboard::data_engine_execute();
     msgbus::send_any(endpoint, &cmd as &dyn Any);
 
-    let handler = get_message_saving_handler::<InstrumentAny>(None);
+    let handler = get_message_saving_handler::<InstrumentEnum>(None);
     let topic = switchboard::get_instrument_topic(audusd_sim.id());
     msgbus::subscribe(topic.into(), handler.clone(), None);
 
     let mut data_engine = data_engine.borrow_mut();
     data_engine.process(&audusd_sim as &dyn Any);
     let cache = &data_engine.get_cache();
-    let messages = get_saved_messages::<InstrumentAny>(handler);
+    let messages = get_saved_messages::<InstrumentEnum>(handler);
 
     assert_eq!(
         cache.instrument(&audusd_sim.id()),

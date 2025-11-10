@@ -24,7 +24,7 @@ use crate::{
     identifiers::{
         AccountId, ClientOrderId, InstrumentId, PositionId, TradeId, Venue, VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderTestBuilder},
     types::{Money, Price, Quantity},
 };
@@ -94,7 +94,7 @@ impl TestOrderEventStubs {
     #[allow(clippy::too_many_arguments)]
     pub fn filled(
         order: &OrderAny,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
         trade_id: Option<TradeId>,
         position_id: Option<PositionId>,
         last_px: Option<Price>,
@@ -167,7 +167,7 @@ impl TestOrderStubs {
     /// Panics if applying the filled event via `accepted_order.apply(...)` fails.
     pub fn make_filled_order(
         order: &OrderAny,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
         liquidity_side: LiquiditySide,
     ) -> OrderAny {
         let mut accepted_order = TestOrderStubs::make_accepted_order(order);

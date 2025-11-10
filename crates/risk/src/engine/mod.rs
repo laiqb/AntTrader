@@ -37,7 +37,7 @@ use ant_model::{
     enums::{InstrumentClass, OrderSide, OrderStatus, TimeInForce, TradingState},
     events::{OrderDenied, OrderEventAny, OrderModifyRejected},
     identifiers::InstrumentId,
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderAny, OrderList},
     types::{Currency, Money, Price, Quantity},
 };
@@ -525,7 +525,7 @@ impl RiskEngine {
 
     // -- PRE-TRADE CHECKS ------------------------------------------------------------------------
 
-    fn check_order(&self, instrument: InstrumentAny, order: OrderAny) -> bool {
+    fn check_order(&self, instrument: InstrumentEnum, order: OrderAny) -> bool {
         ////////////////////////////////////////////////////////////////////////////////
         // VALIDATION CHECKS
         ////////////////////////////////////////////////////////////////////////////////
@@ -550,7 +550,7 @@ impl RiskEngine {
         true
     }
 
-    fn check_order_price(&self, instrument: InstrumentAny, order: OrderAny) -> bool {
+    fn check_order_price(&self, instrument: InstrumentEnum, order: OrderAny) -> bool {
         ////////////////////////////////////////////////////////////////////////////////
         // CHECK PRICE
         ////////////////////////////////////////////////////////////////////////////////
@@ -576,7 +576,7 @@ impl RiskEngine {
         true
     }
 
-    fn check_order_quantity(&self, instrument: InstrumentAny, order: OrderAny) -> bool {
+    fn check_order_quantity(&self, instrument: InstrumentEnum, order: OrderAny) -> bool {
         let risk_msg = self.check_quantity(&instrument, Some(order.quantity()));
         if let Some(risk_msg) = risk_msg {
             self.deny_order(order, &risk_msg);
@@ -586,7 +586,7 @@ impl RiskEngine {
         true
     }
 
-    fn check_orders_risk(&self, instrument: InstrumentAny, orders: Vec<OrderAny>) -> bool {
+    fn check_orders_risk(&self, instrument: InstrumentEnum, orders: Vec<OrderAny>) -> bool {
         ////////////////////////////////////////////////////////////////////////////////
         // CHECK TRIGGER
         ////////////////////////////////////////////////////////////////////////////////
@@ -858,7 +858,7 @@ impl RiskEngine {
         true // Passed
     }
 
-    fn check_price(&self, instrument: &InstrumentAny, price: Option<Price>) -> Option<String> {
+    fn check_price(&self, instrument: &InstrumentEnum, price: Option<Price>) -> Option<String> {
         let price_val = price?;
 
         if price_val.precision > instrument.price_precision() {
@@ -879,7 +879,7 @@ impl RiskEngine {
 
     fn check_quantity(
         &self,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
         quantity: Option<Quantity>,
     ) -> Option<String> {
         let quantity_val = quantity?;
@@ -995,7 +995,7 @@ impl RiskEngine {
 
     // -- EGRESS ----------------------------------------------------------------------------------
 
-    fn execution_gateway(&mut self, instrument: InstrumentAny, command: TradingCommand) {
+    fn execution_gateway(&mut self, instrument: InstrumentEnum, command: TradingCommand) {
         match self.trading_state {
             TradingState::Halted => match command {
                 TradingCommand::SubmitOrder(submit_order) => {

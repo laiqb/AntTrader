@@ -34,7 +34,7 @@ use ant_model::{
     data::{Bar, Data, InstrumentStatus, QuoteTick, TradeTick},
     enums::BarAggregation,
     identifiers::{InstrumentId, Symbol, Venue},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     types::Currency,
 };
 use tokio::sync::Mutex;
@@ -148,7 +148,7 @@ impl DatabentoHistoricalClient {
     pub async fn get_range_instruments(
         &self,
         params: RangeQueryParams,
-    ) -> anyhow::Result<Vec<InstrumentAny>> {
+    ) -> anyhow::Result<Vec<InstrumentEnum>> {
         let symbols: Vec<&str> = params.symbols.iter().map(String::as_str).collect();
         check_consistent_symbology(&symbols)?;
 

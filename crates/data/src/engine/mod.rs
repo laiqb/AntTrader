@@ -80,7 +80,7 @@ use ant_model::{
     },
     enums::{AggregationSource, BarAggregation, BookType, PriceType, RecordFlag},
     identifiers::{ClientId, InstrumentId, Venue},
-    instruments::{Instrument, InstrumentAny, SyntheticInstrument},
+    instruments::{Instrument, InstrumentEnum, SyntheticInstrument},
     orderbook::OrderBook,
 };
 use ant_persistence::backend::catalog::ParquetDataCatalog;
@@ -712,7 +712,7 @@ impl DataEngine {
             return;
         }
 
-        if let Some(instrument) = data.downcast_ref::<InstrumentAny>() {
+        if let Some(instrument) = data.downcast_ref::<InstrumentEnum>() {
             self.handle_instrument(instrument.clone());
         } else if let Some(funding_rate) = data.downcast_ref::<FundingRateUpdate>() {
             self.handle_funding_rate(*funding_rate);
@@ -789,7 +789,7 @@ impl DataEngine {
 
     // -- DATA HANDLERS ---------------------------------------------------------------------------
 
-    fn handle_instrument(&mut self, instrument: InstrumentAny) {
+    fn handle_instrument(&mut self, instrument: InstrumentEnum) {
         if let Err(e) = self
             .cache
             .as_ref()
@@ -1197,14 +1197,14 @@ impl DataEngine {
 
     // -- RESPONSE HANDLERS -----------------------------------------------------------------------
 
-    fn handle_instrument_response(&self, instrument: InstrumentAny) {
+    fn handle_instrument_response(&self, instrument: InstrumentEnum) {
         let mut cache = self.cache.as_ref().borrow_mut();
         if let Err(e) = cache.add_instrument(instrument) {
             log_error_on_cache_insert(&e);
         }
     }
 
-    fn handle_instruments(&self, instruments: &[InstrumentAny]) {
+    fn handle_instruments(&self, instruments: &[InstrumentEnum]) {
         // TODO: Improve by adding bulk update methods to cache and database
         let mut cache = self.cache.as_ref().borrow_mut();
         for instrument in instruments {
@@ -1298,7 +1298,7 @@ impl DataEngine {
 
     fn create_bar_aggregator(
         &mut self,
-        instrument: &InstrumentAny,
+        instrument: &InstrumentEnum,
         bar_type: BarType,
     ) -> Box<dyn BarAggregator> {
         let cache = self.cache.clone();

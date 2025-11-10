@@ -32,7 +32,7 @@ use ant_model::{
         stubs::{account_id, uuid4},
     },
     instruments::{
-        CryptoPerpetual, CurrencyPair, Instrument, InstrumentAny,
+        CryptoPerpetual, CurrencyPair, Instrument, InstrumentEnum,
         stubs::{audusd_sim, currency_pair_btcusdt, default_fx_ccy, ethusdt_bitmex},
     },
     orders::{Order, OrderAny, OrderTestBuilder},
@@ -63,36 +63,36 @@ fn venue() -> Venue {
 }
 
 #[fixture]
-fn instrument_audusd(audusd_sim: CurrencyPair) -> InstrumentAny {
-    InstrumentAny::CurrencyPair(audusd_sim)
+fn instrument_audusd(audusd_sim: CurrencyPair) -> InstrumentEnum {
+    InstrumentEnum::CurrencyPair(audusd_sim)
 }
 
 #[fixture]
-fn instrument_gbpusd() -> InstrumentAny {
-    InstrumentAny::CurrencyPair(default_fx_ccy(
+fn instrument_gbpusd() -> InstrumentEnum {
+    InstrumentEnum::CurrencyPair(default_fx_ccy(
         Symbol::from("GBP/USD"),
         Some(Venue::from("SIM")),
     ))
 }
 
 #[fixture]
-fn instrument_btcusdt(currency_pair_btcusdt: CurrencyPair) -> InstrumentAny {
-    InstrumentAny::CurrencyPair(currency_pair_btcusdt)
+fn instrument_btcusdt(currency_pair_btcusdt: CurrencyPair) -> InstrumentEnum {
+    InstrumentEnum::CurrencyPair(currency_pair_btcusdt)
 }
 
 #[fixture]
-fn instrument_ethusdt(ethusdt_bitmex: CryptoPerpetual) -> InstrumentAny {
-    InstrumentAny::CryptoPerpetual(ethusdt_bitmex)
+fn instrument_ethusdt(ethusdt_bitmex: CryptoPerpetual) -> InstrumentEnum {
+    InstrumentEnum::CryptoPerpetual(ethusdt_bitmex)
 }
 
 #[fixture]
 fn portfolio(
     mut simple_cache: Cache,
     clock: TestClock,
-    instrument_audusd: InstrumentAny,
-    instrument_gbpusd: InstrumentAny,
-    instrument_btcusdt: InstrumentAny,
-    instrument_ethusdt: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
+    instrument_gbpusd: InstrumentEnum,
+    instrument_btcusdt: InstrumentEnum,
+    instrument_ethusdt: InstrumentEnum,
 ) -> Portfolio {
     simple_cache.add_instrument(instrument_audusd).unwrap();
     simple_cache.add_instrument(instrument_gbpusd).unwrap();
@@ -191,7 +191,7 @@ fn get_margin_account(accountid: Option<&str>) -> AccountState {
 }
 
 fn get_quote_tick(
-    instrument: &InstrumentAny,
+    instrument: &InstrumentEnum,
     bid: f64,
     ask: f64,
     bid_size: f64,
@@ -209,7 +209,7 @@ fn get_quote_tick(
 }
 
 fn get_bar(
-    instrument: &InstrumentAny,
+    instrument: &InstrumentEnum,
     open: f64,
     high: f64,
     low: f64,
@@ -378,7 +378,7 @@ fn test_margins_maint_when_no_account_for_venue_returns_none(portfolio: Portfoli
 #[rstest]
 fn test_unrealized_pnl_for_instrument_when_no_instrument_returns_none(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.unrealized_pnl(&instrument_audusd.id());
     assert!(result.is_none());
@@ -396,7 +396,7 @@ fn test_unrealized_pnl_for_venue_when_no_account_returns_empty_dict(
 #[rstest]
 fn test_realized_pnl_for_instrument_when_no_instrument_returns_none(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.realized_pnl(&instrument_audusd.id());
     assert!(result.is_none());
@@ -414,7 +414,7 @@ fn test_realized_pnl_for_venue_when_no_account_returns_empty_dict(
 #[rstest]
 fn test_net_position_when_no_positions_returns_zero(
     portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.net_position(&instrument_audusd.id());
     assert_eq!(result, Decimal::ZERO);
@@ -429,7 +429,7 @@ fn test_net_exposures_when_no_positions_returns_none(portfolio: Portfolio, venue
 #[rstest]
 fn test_is_net_long_when_no_positions_returns_false(
     portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.is_net_long(&instrument_audusd.id());
     assert!(!result);
@@ -438,7 +438,7 @@ fn test_is_net_long_when_no_positions_returns_false(
 #[rstest]
 fn test_is_net_short_when_no_positions_returns_false(
     portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.is_net_short(&instrument_audusd.id());
     assert!(!result);
@@ -447,7 +447,7 @@ fn test_is_net_short_when_no_positions_returns_false(
 #[rstest]
 fn test_is_flat_when_no_positions_returns_true(
     portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let result = portfolio.is_flat(&instrument_audusd.id());
     assert!(result);
@@ -466,7 +466,7 @@ fn test_open_value_when_no_account_returns_none(portfolio: Portfolio, venue: Ven
 }
 
 #[rstest]
-fn test_update_tick(mut portfolio: Portfolio, instrument_audusd: InstrumentAny) {
+fn test_update_tick(mut portfolio: Portfolio, instrument_audusd: InstrumentEnum) {
     let tick = get_quote_tick(&instrument_audusd, 1.25, 1.251, 1.0, 1.0);
     portfolio.update_quote_tick(&tick);
     assert!(portfolio.unrealized_pnl(&instrument_audusd.id()).is_none());
@@ -477,7 +477,7 @@ fn test_update_tick(mut portfolio: Portfolio, instrument_audusd: InstrumentAny) 
 fn test_exceed_free_balance_single_currency_raises_account_balance_negative_exception(
     mut portfolio: Portfolio,
     cash_account_state: AccountState,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     portfolio.update_account(&cash_account_state);
 
@@ -508,7 +508,7 @@ fn test_exceed_free_balance_single_currency_raises_account_balance_negative_exce
 fn test_exceed_free_balance_multi_currency_raises_account_balance_negative_exception(
     mut portfolio: Portfolio,
     cash_account_state: AccountState,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     portfolio.update_account(&cash_account_state);
 
@@ -554,7 +554,7 @@ fn test_exceed_free_balance_multi_currency_raises_account_balance_negative_excep
 fn test_update_orders_open_cash_account(
     mut portfolio: Portfolio,
     cash_account_state: AccountState,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     portfolio.update_account(&cash_account_state);
 
@@ -594,7 +594,7 @@ fn test_update_orders_open_cash_account(
 #[rstest]
 fn test_update_orders_open_margin_account(
     mut portfolio: Portfolio,
-    instrument_btcusdt: InstrumentAny,
+    instrument_btcusdt: InstrumentEnum,
 ) {
     let account_state = get_margin_account(Some("BINANCE-01234"));
     portfolio.update_account(&account_state);
@@ -670,7 +670,7 @@ fn test_update_orders_open_margin_account(
 #[rstest]
 fn test_order_accept_updates_margin_init(
     mut portfolio: Portfolio,
-    instrument_btcusdt: InstrumentAny,
+    instrument_btcusdt: InstrumentEnum,
 ) {
     let account_state = get_margin_account(Some("BINANCE-01234"));
     portfolio.update_account(&account_state);
@@ -723,7 +723,7 @@ fn test_order_accept_updates_margin_init(
 }
 
 #[rstest]
-fn test_update_positions(mut portfolio: Portfolio, instrument_audusd: InstrumentAny) {
+fn test_update_positions(mut portfolio: Portfolio, instrument_audusd: InstrumentEnum) {
     let account_state = get_cash_account(None);
     portfolio.update_account(&account_state);
 
@@ -807,7 +807,7 @@ fn test_update_positions(mut portfolio: Portfolio, instrument_audusd: Instrument
 #[rstest]
 fn test_opening_one_long_position_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -897,7 +897,7 @@ fn test_opening_one_long_position_updates_portfolio(
 #[rstest]
 fn test_opening_one_long_position_updates_portfolio_with_bar(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -986,7 +986,7 @@ fn test_opening_one_long_position_updates_portfolio_with_bar(
 #[rstest]
 fn test_opening_one_short_position_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -1099,8 +1099,8 @@ fn test_opening_one_short_position_updates_portfolio(
 #[rstest]
 fn test_opening_positions_with_multi_asset_account(
     mut portfolio: Portfolio,
-    instrument_btcusdt: InstrumentAny,
-    instrument_ethusdt: InstrumentAny,
+    instrument_btcusdt: InstrumentEnum,
+    instrument_ethusdt: InstrumentEnum,
 ) {
     let account_state = get_margin_account(Some("BITMEX-01234"));
     portfolio.update_account(&account_state);
@@ -1191,8 +1191,8 @@ fn test_opening_positions_with_multi_asset_account(
 #[rstest]
 fn test_market_value_when_insufficient_data_for_xrate_returns_none(
     mut portfolio: Portfolio,
-    instrument_btcusdt: InstrumentAny,
-    instrument_ethusdt: InstrumentAny,
+    instrument_btcusdt: InstrumentEnum,
+    instrument_ethusdt: InstrumentEnum,
 ) {
     let account_state = get_margin_account(Some("BITMEX-01234"));
     portfolio.update_account(&account_state);
@@ -1259,8 +1259,8 @@ fn test_market_value_when_insufficient_data_for_xrate_returns_none(
 #[rstest]
 fn test_opening_several_positions_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
-    instrument_gbpusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
+    instrument_gbpusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -1450,7 +1450,7 @@ fn test_opening_several_positions_updates_portfolio(
 #[rstest]
 fn test_modifying_position_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -1604,7 +1604,7 @@ fn test_modifying_position_updates_portfolio(
 #[rstest]
 fn test_closing_position_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     // Arrange - Create margin account with 1,000,000 USD balance
     let account_id = AccountId::new("SIM-01234");
@@ -1783,8 +1783,8 @@ fn test_closing_position_updates_portfolio(
 #[rstest]
 fn test_several_positions_with_different_instruments_updates_portfolio(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
-    instrument_gbpusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
+    instrument_gbpusd: InstrumentEnum,
 ) {
     let account_state = get_margin_account(None);
     portfolio.update_account(&account_state);
@@ -1972,7 +1972,7 @@ fn test_several_positions_with_different_instruments_updates_portfolio(
 #[rstest]
 fn test_realized_pnl_with_missing_exchange_rate_returns_zero_instead_of_panic(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     let mut cache = portfolio.cache.borrow_mut();
     cache.add_instrument(instrument_audusd.clone()).unwrap();
@@ -2041,7 +2041,7 @@ fn test_realized_pnl_with_missing_exchange_rate_returns_zero_instead_of_panic(
 #[rstest]
 fn test_portfolio_realized_pnl_with_position_snapshots_netting_oms(
     mut portfolio: Portfolio,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
 ) {
     // Setup account
     let account_state = get_margin_account(None);

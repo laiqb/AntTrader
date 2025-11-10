@@ -182,7 +182,7 @@ mod tests {
         enums::OmsType,
         events::OrderFilled,
         identifiers::{PositionId, Venue, VenueOrderId},
-        instruments::InstrumentAny,
+        instruments::InstrumentEnum,
         orders::OrderAny,
         position::Position,
     };
@@ -210,7 +210,7 @@ mod tests {
 
     #[rstest]
     fn test_get_position_id_hedging_with_existing_position(
-        instrument_eth_usdt: InstrumentAny,
+        instrument_eth_usdt: InstrumentEnum,
         market_order_buy: OrderAny,
         market_order_fill: OrderFilled,
     ) {
@@ -240,7 +240,7 @@ mod tests {
 
     #[rstest]
     fn test_get_position_id_netting(
-        instrument_eth_usdt: InstrumentAny,
+        instrument_eth_usdt: InstrumentEnum,
         market_order_buy: OrderAny,
         market_order_fill: OrderFilled,
     ) {

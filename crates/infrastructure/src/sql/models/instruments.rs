@@ -25,7 +25,7 @@ use ant_model::{
     identifiers::{InstrumentId, Symbol},
     instruments::{
         BettingInstrument, BinaryOption, CryptoFuture, CryptoOption, CryptoPerpetual, CurrencyPair,
-        Equity, FuturesContract, FuturesSpread, InstrumentAny, OptionContract, OptionSpread,
+        Equity, FuturesContract, FuturesSpread, InstrumentEnum, OptionContract, OptionSpread,
     },
     types::{Currency, Money, Price, Quantity},
 };
@@ -36,7 +36,7 @@ use ustr::Ustr;
 use crate::sql::models::enums::AssetClassModel;
 
 #[derive(Debug)]
-pub struct InstrumentAnyModel(pub InstrumentAny);
+pub struct InstrumentAnyModel(pub InstrumentEnum);
 
 #[derive(Debug)]
 pub struct BettingInstrumentModel(pub BettingInstrument);
@@ -75,47 +75,47 @@ impl<'r> FromRow<'r, PgRow> for InstrumentAnyModel {
     fn from_row(row: &'r PgRow) -> Result<Self, sqlx::Error> {
         let kind = row.get::<String, _>("kind");
         if kind == "BETTING" {
-            Ok(Self(InstrumentAny::Betting(
+            Ok(Self(InstrumentEnum::Betting(
                 BettingInstrumentModel::from_row(row).unwrap().0,
             )))
         } else if kind == "BINARY_OPTION" {
-            Ok(Self(InstrumentAny::BinaryOption(
+            Ok(Self(InstrumentEnum::BinaryOption(
                 BinaryOptionModel::from_row(row).unwrap().0,
             )))
         } else if kind == "CRYPTO_FUTURE" {
-            Ok(Self(InstrumentAny::CryptoFuture(
+            Ok(Self(InstrumentEnum::CryptoFuture(
                 CryptoFutureModel::from_row(row).unwrap().0,
             )))
         } else if kind == "CRYPTO_OPTION" {
-            Ok(Self(InstrumentAny::CryptoOption(
+            Ok(Self(InstrumentEnum::CryptoOption(
                 CryptoOptionModel::from_row(row).unwrap().0,
             )))
         } else if kind == "CRYPTO_PERPETUAL" {
-            Ok(Self(InstrumentAny::CryptoPerpetual(
+            Ok(Self(InstrumentEnum::CryptoPerpetual(
                 CryptoPerpetualModel::from_row(row).unwrap().0,
             )))
         } else if kind == "CURRENCY_PAIR" {
-            Ok(Self(InstrumentAny::CurrencyPair(
+            Ok(Self(InstrumentEnum::CurrencyPair(
                 CurrencyPairModel::from_row(row).unwrap().0,
             )))
         } else if kind == "EQUITY" {
-            Ok(Self(InstrumentAny::Equity(
+            Ok(Self(InstrumentEnum::Equity(
                 EquityModel::from_row(row).unwrap().0,
             )))
         } else if kind == "FUTURES_CONTRACT" {
-            Ok(Self(InstrumentAny::FuturesContract(
+            Ok(Self(InstrumentEnum::FuturesContract(
                 FuturesContractModel::from_row(row).unwrap().0,
             )))
         } else if kind == "FUTURES_SPREAD" {
-            Ok(Self(InstrumentAny::FuturesSpread(
+            Ok(Self(InstrumentEnum::FuturesSpread(
                 FuturesSpreadModel::from_row(row).unwrap().0,
             )))
         } else if kind == "OPTION_CONTRACT" {
-            Ok(Self(InstrumentAny::OptionContract(
+            Ok(Self(InstrumentEnum::OptionContract(
                 OptionContractModel::from_row(row).unwrap().0,
             )))
         } else if kind == "OPTION_SPREAD" {
-            Ok(Self(InstrumentAny::OptionSpread(
+            Ok(Self(InstrumentEnum::OptionSpread(
                 OptionSpreadModel::from_row(row).unwrap().0,
             )))
         } else {

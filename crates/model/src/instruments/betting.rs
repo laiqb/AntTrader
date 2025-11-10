@@ -24,7 +24,7 @@ use rust_decimal_macros::dec;
 use serde::{Deserialize, Serialize};
 use ustr::Ustr;
 
-use super::{Instrument, any::InstrumentAny};
+use super::{Instrument, any::InstrumentEnum};
 use crate::{
     enums::{AssetClass, InstrumentClass, OptionKind},
     identifiers::{InstrumentId, Symbol},
@@ -316,8 +316,8 @@ impl Hash for BettingInstrument {
 }
 
 impl Instrument for BettingInstrument {
-    fn into_any(self) -> InstrumentAny {
-        InstrumentAny::Betting(self)
+    fn into_any(self) -> InstrumentEnum {
+        InstrumentEnum::Betting(self)
     }
 
     fn id(&self) -> InstrumentId {

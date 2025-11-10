@@ -23,7 +23,7 @@ use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use ustr::Ustr;
 
-use super::{Instrument, any::InstrumentAny};
+use super::{Instrument, any::InstrumentEnum};
 use crate::{
     enums::{AssetClass, InstrumentClass, OptionKind},
     identifiers::{InstrumentId, Symbol},
@@ -201,8 +201,8 @@ impl Hash for Equity {
 }
 
 impl Instrument for Equity {
-    fn into_any(self) -> InstrumentAny {
-        InstrumentAny::Equity(self)
+    fn into_any(self) -> InstrumentEnum {
+        InstrumentEnum::Equity(self)
     }
 
     fn id(&self) -> InstrumentId {

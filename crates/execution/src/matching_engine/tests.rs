@@ -43,7 +43,7 @@ use ant_model::{
         TraderId, VenueOrderId, stubs::account_id,
     },
     instruments::{
-        CryptoPerpetual, Equity, Instrument, InstrumentAny,
+        CryptoPerpetual, Equity, Instrument, InstrumentEnum,
         stubs::{crypto_perpetual_ethusdt, equity_aapl, futures_contract_es},
     },
     orders::{
@@ -72,13 +72,13 @@ fn order_event_handler() -> ShareableMessageHandler {
 }
 
 #[fixture]
-pub fn instrument_eth_usdt(crypto_perpetual_ethusdt: CryptoPerpetual) -> InstrumentAny {
-    InstrumentAny::CryptoPerpetual(crypto_perpetual_ethusdt)
+pub fn instrument_eth_usdt(crypto_perpetual_ethusdt: CryptoPerpetual) -> InstrumentEnum {
+    InstrumentEnum::CryptoPerpetual(crypto_perpetual_ethusdt)
 }
 
 // Market buy order with corresponding fill
 #[fixture]
-pub fn market_order_buy(instrument_eth_usdt: InstrumentAny) -> OrderAny {
+pub fn market_order_buy(instrument_eth_usdt: InstrumentEnum) -> OrderAny {
     OrderTestBuilder::new(OrderType::Market)
         .instrument_id(instrument_eth_usdt.id())
         .side(OrderSide::Buy)
@@ -90,7 +90,7 @@ pub fn market_order_buy(instrument_eth_usdt: InstrumentAny) -> OrderAny {
 
 #[fixture]
 pub fn market_order_fill(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     account_id: AccountId,
     market_order_buy: OrderAny,
 ) -> OrderFilled {
@@ -119,7 +119,7 @@ pub fn market_order_fill(
 
 // Market sell order
 #[fixture]
-pub fn market_order_sell(instrument_eth_usdt: InstrumentAny) -> OrderAny {
+pub fn market_order_sell(instrument_eth_usdt: InstrumentEnum) -> OrderAny {
     OrderTestBuilder::new(OrderType::Market)
         .instrument_id(instrument_eth_usdt.id())
         .side(OrderSide::Sell)
@@ -131,7 +131,7 @@ pub fn market_order_sell(instrument_eth_usdt: InstrumentAny) -> OrderAny {
 
 // For valid ES futures contract currently active
 #[fixture]
-fn instrument_es() -> InstrumentAny {
+fn instrument_es() -> InstrumentEnum {
     let activation = UnixNanos::from(
         Utc.with_ymd_and_hms(2022, 4, 8, 0, 0, 0)
             .unwrap()
@@ -144,7 +144,7 @@ fn instrument_es() -> InstrumentAny {
             .timestamp_nanos_opt()
             .unwrap() as u64,
     );
-    InstrumentAny::FuturesContract(futures_contract_es(Some(activation), Some(expiration)))
+    InstrumentEnum::FuturesContract(futures_contract_es(Some(activation), Some(expiration)))
 }
 
 #[fixture]
@@ -162,7 +162,7 @@ fn engine_config() -> OrderMatchingEngineConfig {
 // -- HELPERS ---------------------------------------------------------------------------
 
 fn get_order_matching_engine(
-    instrument: InstrumentAny,
+    instrument: InstrumentEnum,
     cache: Option<Rc<RefCell<Cache>>>,
     account_type: Option<AccountType>,
     config: Option<OrderMatchingEngineConfig>,
@@ -186,7 +186,7 @@ fn get_order_matching_engine(
 }
 
 fn get_order_matching_engine_l2(
-    instrument: InstrumentAny,
+    instrument: InstrumentEnum,
     cache: Option<Rc<RefCell<Cache>>>,
     account_type: Option<AccountType>,
     config: Option<OrderMatchingEngineConfig>,
@@ -225,7 +225,7 @@ fn test_process_order_when_instrument_already_expired(
     // TODO: We have at least three different fixture styles for obtaining and using the message bus,
     // so this is not the final or standard pattern but avoids shadowing the `msgbus` module while
     // the clearer calling convention for global message bus functions is established.
-    let instrument = InstrumentAny::FuturesContract(futures_contract_es(None, None));
+    let instrument = InstrumentEnum::FuturesContract(futures_contract_es(None, None));
     msgbus::register(
         MessagingSwitchboard::exec_engine_process(),
         order_event_handler.clone(),
@@ -270,7 +270,7 @@ fn test_process_order_when_instrument_not_active(
             .unwrap() as u64,
     );
     let instrument =
-        InstrumentAny::FuturesContract(futures_contract_es(Some(activation), Some(expiration)));
+        InstrumentEnum::FuturesContract(futures_contract_es(Some(activation), Some(expiration)));
     msgbus::register(
         MessagingSwitchboard::exec_engine_process(),
         order_event_handler.clone(),
@@ -296,7 +296,7 @@ fn test_process_order_when_instrument_not_active(
 fn test_process_order_when_invalid_quantity_precision(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
 ) {
     msgbus::register(
         MessagingSwitchboard::exec_engine_process(),
@@ -333,7 +333,7 @@ fn test_process_order_when_invalid_quantity_precision(
 fn test_process_order_when_invalid_price_precision(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_es: InstrumentAny,
+    instrument_es: InstrumentEnum,
     test_clock: Rc<RefCell<TestClock>>,
 ) {
     msgbus::register(
@@ -376,7 +376,7 @@ fn test_process_order_when_invalid_price_precision(
 fn test_process_order_when_invalid_trigger_price_precision(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_es: InstrumentAny,
+    instrument_es: InstrumentEnum,
     test_clock: Rc<RefCell<TestClock>>,
 ) {
     msgbus::register(
@@ -425,7 +425,7 @@ fn test_process_order_when_shorting_equity_without_margin_account(
         order_event_handler.clone(),
     );
 
-    let instrument = InstrumentAny::Equity(equity_aapl);
+    let instrument = InstrumentEnum::Equity(equity_aapl);
 
     let mut market_order_sell = OrderTestBuilder::new(OrderType::Market)
         .instrument_id(instrument.id())
@@ -459,7 +459,7 @@ fn test_process_order_when_shorting_equity_without_margin_account(
 fn test_process_order_when_invalid_reduce_only(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     engine_config: OrderMatchingEngineConfig,
 ) {
     msgbus::register(
@@ -501,7 +501,7 @@ fn test_process_order_when_invalid_reduce_only(
 fn test_process_order_when_invalid_contingent_orders(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_es: InstrumentAny,
+    instrument_es: InstrumentEnum,
     engine_config: OrderMatchingEngineConfig,
     test_clock: Rc<RefCell<TestClock>>,
 ) {
@@ -577,7 +577,7 @@ fn test_process_order_when_invalid_contingent_orders(
 fn test_process_order_when_closed_linked_order(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_es: InstrumentAny,
+    instrument_es: InstrumentEnum,
     engine_config: OrderMatchingEngineConfig,
     test_clock: Rc<RefCell<TestClock>>,
 ) {
@@ -661,7 +661,7 @@ fn test_process_order_when_closed_linked_order(
 fn test_process_market_order_no_market_rejected(
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     mut market_order_buy: OrderAny,
     mut market_order_sell: OrderAny,
 ) {
@@ -694,7 +694,7 @@ fn test_process_market_order_no_market_rejected(
 }
 
 #[rstest]
-fn test_bid_ask_initialized(instrument_es: InstrumentAny) {
+fn test_bid_ask_initialized(instrument_es: InstrumentEnum) {
     let mut engine_l2 = get_order_matching_engine_l2(instrument_es.clone(), None, None, None, None);
     // Create bid and ask orderbook delta and check if
     // bid and ask are initialized in order matching core
@@ -725,7 +725,7 @@ fn test_bid_ask_initialized(instrument_es: InstrumentAny) {
 
 #[rstest]
 fn test_not_enough_quantity_filled_fok_order(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -774,7 +774,7 @@ fn test_not_enough_quantity_filled_fok_order(
 
 #[rstest]
 fn test_valid_market_buy(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -843,7 +843,7 @@ fn test_valid_market_buy(
 
 #[rstest]
 fn test_process_limit_post_only_order_that_would_be_a_taker(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -904,7 +904,7 @@ fn test_process_limit_post_only_order_that_would_be_a_taker(
 
 #[rstest]
 fn test_process_limit_order_not_matched_and_canceled_fok_order(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -961,7 +961,7 @@ fn test_process_limit_order_not_matched_and_canceled_fok_order(
 
 #[rstest]
 fn test_process_limit_order_matched_immediate_fill(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1017,7 +1017,7 @@ fn test_process_limit_order_matched_immediate_fill(
 
 #[rstest]
 fn test_process_stop_market_order_triggered_rejected(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1082,7 +1082,7 @@ fn test_process_stop_market_order_triggered_rejected(
 
 #[rstest]
 fn test_process_stop_market_order_valid_trigger_filled(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1134,7 +1134,7 @@ fn test_process_stop_market_order_valid_trigger_filled(
 
 #[rstest]
 fn test_process_stop_market_order_valid_not_triggered_accepted(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1183,7 +1183,7 @@ fn test_process_stop_market_order_valid_not_triggered_accepted(
 
 #[rstest]
 fn test_process_stop_limit_order_triggered_not_filled(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1240,7 +1240,7 @@ fn test_process_stop_limit_order_triggered_not_filled(
 
 #[rstest]
 fn test_process_stop_limit_order_triggered_filled(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1305,7 +1305,7 @@ fn test_process_stop_limit_order_triggered_filled(
 
 #[rstest]
 fn test_process_cancel_command_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1373,7 +1373,7 @@ fn test_process_cancel_command_valid(
 
 #[rstest]
 fn test_process_cancel_command_order_not_found(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
 ) {
     msgbus::register(
@@ -1419,7 +1419,7 @@ fn test_process_cancel_command_order_not_found(
 
 #[rstest]
 fn test_process_cancel_all_command(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1554,7 +1554,7 @@ fn test_process_cancel_all_command(
 
 #[rstest]
 fn test_process_batch_cancel_command(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1667,7 +1667,7 @@ fn test_process_batch_cancel_command(
 
 #[rstest]
 fn test_expire_order(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1755,7 +1755,7 @@ fn test_expire_order(
 
 #[rstest]
 fn test_process_modify_order_rejected_not_found(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1798,7 +1798,7 @@ fn test_process_modify_order_rejected_not_found(
 
 #[rstest]
 fn test_update_limit_order_post_only_matched(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1877,7 +1877,7 @@ fn test_update_limit_order_post_only_matched(
 
 #[rstest]
 fn test_update_limit_order_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -1960,7 +1960,7 @@ fn test_update_limit_order_valid(
 
 #[rstest]
 fn test_update_stop_market_order_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2034,7 +2034,7 @@ fn test_update_stop_market_order_valid(
 
 #[rstest]
 fn test_update_stop_limit_order_valid_update_not_triggered(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2097,7 +2097,7 @@ fn test_update_stop_limit_order_valid_update_not_triggered(
 
 #[rstest]
 fn test_process_market_if_touched_order_already_triggered(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2148,7 +2148,7 @@ fn test_process_market_if_touched_order_already_triggered(
 
 #[rstest]
 fn test_update_market_if_touched_order_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2210,7 +2210,7 @@ fn test_update_market_if_touched_order_valid(
 
 #[rstest]
 fn test_process_limit_if_touched_order_immediate_trigger_and_fill(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2277,7 +2277,7 @@ fn test_process_limit_if_touched_order_immediate_trigger_and_fill(
 
 #[rstest]
 fn test_update_limit_if_touched_order_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2352,7 +2352,7 @@ fn test_update_limit_if_touched_order_valid(
 
 #[rstest]
 fn test_process_market_to_limit_orders_not_fully_filled(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2426,7 +2426,7 @@ fn test_process_market_to_limit_orders_not_fully_filled(
 
 #[rstest]
 fn test_process_trailing_stop_orders_rejeceted_and_valid(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2506,7 +2506,7 @@ fn test_process_trailing_stop_orders_rejeceted_and_valid(
 
 #[rstest]
 fn test_updating_of_trailing_stop_market_order_with_no_trigger_price_set(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {
@@ -2577,7 +2577,7 @@ fn test_updating_of_trailing_stop_market_order_with_no_trigger_price_set(
 
 #[rstest]
 fn test_updating_of_contingent_orders(
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     order_event_handler: ShareableMessageHandler,
     account_id: AccountId,
 ) {

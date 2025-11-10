@@ -28,7 +28,7 @@ use crate::{
     enums::{AccountType, LiquiditySide, OrderSide},
     events::{AccountState, OrderFilled},
     identifiers::AccountId,
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     position::Position,
     types::{AccountBalance, Currency, Money, Price, Quantity},
 };
@@ -227,7 +227,7 @@ impl BaseAccount {
     /// Panics if `side` is not [`OrderSide::Buy`] or [`OrderSide::Sell`].
     pub fn base_calculate_balance_locked(
         &mut self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         side: OrderSide,
         quantity: Quantity,
         price: Price,
@@ -268,7 +268,7 @@ impl BaseAccount {
     /// Panics if `fill.order_side` is neither [`OrderSide::Buy`] nor [`OrderSide::Sell`].
     pub fn base_calculate_pnls(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         fill: OrderFilled,
         position: Option<Position>,
     ) -> anyhow::Result<Vec<Money>> {
@@ -319,7 +319,7 @@ impl BaseAccount {
     /// Panics if `liquidity_side` is `LiquiditySide::NoLiquiditySide` or otherwise invalid.
     pub fn base_calculate_commission(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         last_qty: Quantity,
         last_px: Price,
         liquidity_side: LiquiditySide,

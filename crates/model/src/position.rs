@@ -34,7 +34,7 @@ use crate::{
         AccountId, ClientOrderId, InstrumentId, PositionId, StrategyId, Symbol, TradeId, TraderId,
         Venue, VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     types::{Currency, Money, Price, Quantity},
 };
 
@@ -93,7 +93,7 @@ impl Position {
     /// - The `instrument.id()` does not match the `fill.instrument_id`.
     /// - The `fill.order_side` is `NoOrderSide`.
     /// - The `fill.position_id` is `None`.
-    pub fn new(instrument: &InstrumentAny, fill: OrderFilled) -> Self {
+    pub fn new(instrument: &InstrumentEnum, fill: OrderFilled) -> Self {
         check_equal(
             &instrument.id(),
             &fill.instrument_id,
@@ -640,7 +640,7 @@ mod tests {
         identifiers::{
             AccountId, ClientOrderId, PositionId, StrategyId, TradeId, VenueOrderId, stubs::uuid4,
         },
-        instruments::{CryptoPerpetual, CurrencyPair, Instrument, InstrumentAny, stubs::*},
+        instruments::{CryptoPerpetual, CurrencyPair, Instrument, InstrumentEnum, stubs::*},
         orders::{Order, builder::OrderTestBuilder, stubs::TestOrderEventStubs},
         position::Position,
         stubs::*,
@@ -662,7 +662,7 @@ mod tests {
     #[rstest]
     #[should_panic(expected = "`fill.trade_id` already contained in `trade_ids")]
     fn test_two_trades_with_same_trade_id_error(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -703,7 +703,7 @@ mod tests {
 
     #[rstest]
     fn test_position_filled_with_buy_order(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -758,7 +758,7 @@ mod tests {
 
     #[rstest]
     fn test_position_filled_with_sell_order(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Sell)
@@ -814,7 +814,7 @@ mod tests {
 
     #[rstest]
     fn test_position_partial_fills_with_buy_order(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -858,7 +858,7 @@ mod tests {
 
     #[rstest]
     fn test_position_partial_fills_with_two_sell_orders(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Sell)
@@ -915,7 +915,7 @@ mod tests {
 
     #[rstest]
     pub fn test_position_filled_with_buy_order_then_sell_order(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -986,7 +986,7 @@ mod tests {
 
     #[rstest]
     pub fn test_position_filled_with_sell_order_then_buy_order(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Sell)
@@ -1065,7 +1065,7 @@ mod tests {
 
     #[rstest]
     fn test_position_filled_with_no_change(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -1132,7 +1132,7 @@ mod tests {
 
     #[rstest]
     fn test_position_long_with_multiple_filled_orders(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -1219,7 +1219,7 @@ mod tests {
 
     #[rstest]
     fn test_pnl_calculation_from_trading_technologies_example(currency_pair_ethusdt: CurrencyPair) {
-        let ethusdt = InstrumentAny::CurrencyPair(currency_pair_ethusdt);
+        let ethusdt = InstrumentEnum::CurrencyPair(currency_pair_ethusdt);
         let quantity1 = Quantity::from(12);
         let price1 = Price::from("100.0");
         let order1 = OrderTestBuilder::new(OrderType::Market)
@@ -1345,7 +1345,7 @@ mod tests {
 
     #[rstest]
     fn test_position_closed_and_reopened(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let quantity1 = Quantity::from(150_000);
         let price1 = Price::from("1.00001");
         let order = OrderTestBuilder::new(OrderType::Market)
@@ -1449,7 +1449,7 @@ mod tests {
     fn test_position_realized_pnl_with_interleaved_order_sides(
         currency_pair_btcusdt: CurrencyPair,
     ) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Buy)
@@ -1584,7 +1584,7 @@ mod tests {
     fn test_calculate_pnl_when_given_position_side_flat_returns_zero(
         currency_pair_btcusdt: CurrencyPair,
     ) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Buy)
@@ -1609,7 +1609,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_long_position_win(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Buy)
@@ -1646,7 +1646,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_long_position_loss(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Buy)
@@ -1683,7 +1683,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_short_position_winning(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Sell)
@@ -1720,7 +1720,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_short_position_loss(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Sell)
@@ -1757,7 +1757,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_inverse1(xbtusd_bitmex: CryptoPerpetual) {
-        let xbtusd_bitmex = InstrumentAny::CryptoPerpetual(xbtusd_bitmex);
+        let xbtusd_bitmex = InstrumentEnum::CryptoPerpetual(xbtusd_bitmex);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(xbtusd_bitmex.id())
             .side(OrderSide::Sell)
@@ -1797,7 +1797,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_pnl_for_inverse2(ethusdt_bitmex: CryptoPerpetual) {
-        let ethusdt_bitmex = InstrumentAny::CryptoPerpetual(ethusdt_bitmex);
+        let ethusdt_bitmex = InstrumentEnum::CryptoPerpetual(ethusdt_bitmex);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(ethusdt_bitmex.id())
             .side(OrderSide::Sell)
@@ -1835,7 +1835,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_unrealized_pnl_for_long(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Buy)
@@ -1890,7 +1890,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_unrealized_pnl_for_short(currency_pair_btcusdt: CurrencyPair) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(btcusdt.id())
             .side(OrderSide::Sell)
@@ -1925,7 +1925,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_unrealized_pnl_for_long_inverse(xbtusd_bitmex: CryptoPerpetual) {
-        let xbtusd_bitmex = InstrumentAny::CryptoPerpetual(xbtusd_bitmex);
+        let xbtusd_bitmex = InstrumentEnum::CryptoPerpetual(xbtusd_bitmex);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(xbtusd_bitmex.id())
             .side(OrderSide::Buy)
@@ -1959,7 +1959,7 @@ mod tests {
 
     #[rstest]
     fn test_calculate_unrealized_pnl_for_short_inverse(xbtusd_bitmex: CryptoPerpetual) {
-        let xbtusd_bitmex = InstrumentAny::CryptoPerpetual(xbtusd_bitmex);
+        let xbtusd_bitmex = InstrumentEnum::CryptoPerpetual(xbtusd_bitmex);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(xbtusd_bitmex.id())
             .side(OrderSide::Sell)
@@ -2000,7 +2000,7 @@ mod tests {
         #[case] expected: f64,
         audusd_sim: CurrencyPair,
     ) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(order_side)
@@ -2027,7 +2027,7 @@ mod tests {
 
     #[rstest]
     fn test_position_with_commission_none(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let fill = OrderFilled {
             position_id: Some(PositionId::from("1")),
             ..Default::default()
@@ -2039,7 +2039,7 @@ mod tests {
 
     #[rstest]
     fn test_position_with_commission_zero(audusd_sim: CurrencyPair) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let fill = OrderFilled {
             position_id: Some(PositionId::from("1")),
             commission: Some(Money::from("0 USD")),
@@ -2053,7 +2053,7 @@ mod tests {
     #[rstest]
     fn test_cache_purge_order_events() {
         let audusd_sim = audusd_sim();
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
 
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .client_order_id(ClientOrderId::new("O-1"))
@@ -2111,7 +2111,7 @@ mod tests {
     #[rstest]
     fn test_purge_all_events_returns_none_for_last_event_and_trade_id() {
         let audusd_sim = audusd_sim();
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
 
         let order = OrderTestBuilder::new(OrderType::Market)
             .client_order_id(ClientOrderId::new("O-1"))

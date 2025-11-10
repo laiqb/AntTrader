@@ -23,7 +23,7 @@ use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use ustr::Ustr;
 
-use super::any::InstrumentAny;
+use super::any::InstrumentEnum;
 use crate::{
     enums::{AssetClass, InstrumentClass, OptionKind},
     identifiers::{InstrumentId, Symbol},
@@ -250,8 +250,8 @@ impl Hash for CryptoPerpetual {
 }
 
 impl Instrument for CryptoPerpetual {
-    fn into_any(self) -> InstrumentAny {
-        InstrumentAny::CryptoPerpetual(self)
+    fn into_any(self) -> InstrumentEnum {
+        InstrumentEnum::CryptoPerpetual(self)
     }
 
     fn id(&self) -> InstrumentId {

@@ -23,7 +23,7 @@ use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use ustr::Ustr;
 
-use super::{Instrument, any::InstrumentAny};
+use super::{Instrument, any::InstrumentEnum};
 use crate::{
     enums::{AssetClass, InstrumentClass, OptionKind},
     identifiers::{InstrumentId, Symbol},
@@ -246,8 +246,8 @@ impl Hash for FuturesSpread {
 }
 
 impl Instrument for FuturesSpread {
-    fn into_any(self) -> InstrumentAny {
-        InstrumentAny::FuturesSpread(self)
+    fn into_any(self) -> InstrumentEnum {
+        InstrumentEnum::FuturesSpread(self)
     }
 
     fn id(&self) -> InstrumentId {

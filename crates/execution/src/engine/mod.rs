@@ -53,7 +53,7 @@ use ant_model::{
         PositionOpened,
     },
     identifiers::{ClientId, InstrumentId, PositionId, StrategyId, Venue},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orderbook::own::{OwnOrderBook, should_handle_own_book_order},
     orders::{Order, OrderAny, OrderError},
     position::Position,
@@ -791,7 +791,7 @@ impl ExecutionEngine {
     /// This function mirrors the Python `_handle_position_update` method.
     fn handle_position_update(
         &mut self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         fill: OrderFilled,
         oms_type: OmsType,
     ) {
@@ -834,7 +834,7 @@ impl ExecutionEngine {
 
     fn open_position(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         position: Option<&Position>,
         fill: OrderFilled,
         oms_type: OmsType,
@@ -907,7 +907,7 @@ impl ExecutionEngine {
 
     fn flip_position(
         &mut self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         position: &mut Position,
         fill: OrderFilled,
         oms_type: OmsType,

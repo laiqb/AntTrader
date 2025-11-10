@@ -38,7 +38,7 @@ use ant_model::{
         AccountId, ClientId, ClientOrderId, ComponentId, InstrumentId, PositionId, StrategyId,
         TraderId, VenueOrderId,
     },
-    instruments::{InstrumentAny, SyntheticInstrument},
+    instruments::{InstrumentEnum, SyntheticInstrument},
     orderbook::OrderBook,
     orders::OrderAny,
     position::Position,
@@ -871,7 +871,7 @@ impl CacheDatabaseAdapter for RedisCacheDatabaseAdapter {
         .await
     }
 
-    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentAny>> {
+    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentEnum>> {
         DatabaseQueries::load_instruments(
             &self.database.con,
             &self.database.trader_key,
@@ -929,7 +929,7 @@ impl CacheDatabaseAdapter for RedisCacheDatabaseAdapter {
     async fn load_instrument(
         &self,
         instrument_id: &InstrumentId,
-    ) -> anyhow::Result<Option<InstrumentAny>> {
+    ) -> anyhow::Result<Option<InstrumentEnum>> {
         DatabaseQueries::load_instrument(
             &self.database.con,
             &self.database.trader_key,
@@ -1095,7 +1095,7 @@ impl CacheDatabaseAdapter for RedisCacheDatabaseAdapter {
         todo!()
     }
 
-    fn add_instrument(&self, instrument: &InstrumentAny) -> anyhow::Result<()> {
+    fn add_instrument(&self, instrument: &InstrumentEnum) -> anyhow::Result<()> {
         todo!()
     }
 

@@ -1274,7 +1274,7 @@ mod tests {
     use ant_model::{
         data::{BarSpecification, BarType},
         enums::{AggregationSource, BarAggregation, PriceType},
-        instruments::{CurrencyPair, Equity, Instrument, InstrumentAny, stubs::*},
+        instruments::{CurrencyPair, Equity, Instrument, InstrumentEnum, stubs::*},
         types::{Price, Quantity},
     };
     use rstest::rstest;
@@ -1284,7 +1284,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_initialization(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1303,7 +1303,7 @@ mod tests {
 
     #[rstest]
     fn test_set_partial_update(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1339,7 +1339,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_maintains_ohlc_order(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1377,7 +1377,7 @@ mod tests {
 
     #[rstest]
     fn test_update_ignores_earlier_timestamps(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(100, BarAggregation::Tick, PriceType::Last),
@@ -1398,7 +1398,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_set_partial_updates_bar_to_expected_properties(audusd_sim: CurrencyPair) {
-        let instrument = InstrumentAny::CurrencyPair(audusd_sim);
+        let instrument = InstrumentEnum::CurrencyPair(audusd_sim);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1435,7 +1435,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_set_partial_when_already_set_does_not_update(audusd_sim: CurrencyPair) {
-        let instrument = InstrumentAny::CurrencyPair(audusd_sim);
+        let instrument = InstrumentEnum::CurrencyPair(audusd_sim);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1487,7 +1487,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_single_update_results_in_expected_properties(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1514,7 +1514,7 @@ mod tests {
     fn test_bar_builder_single_update_when_timestamp_less_than_last_update_ignores(
         equity_aapl: Equity,
     ) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1540,7 +1540,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_multiple_updates_correctly_increments_count(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1566,7 +1566,7 @@ mod tests {
     #[rstest]
     #[should_panic]
     fn test_bar_builder_build_when_no_updates_panics(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1582,7 +1582,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_build_when_received_updates_returns_expected_bar(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1624,7 +1624,7 @@ mod tests {
 
     #[rstest]
     fn test_bar_builder_build_with_previous_close(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_type = BarType::new(
             instrument.id(),
             BarSpecification::new(3, BarAggregation::Tick, PriceType::Last),
@@ -1666,7 +1666,7 @@ mod tests {
 
     #[rstest]
     fn test_tick_bar_aggregator_handle_trade_when_step_count_below_threshold(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(3, BarAggregation::Tick, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1692,7 +1692,7 @@ mod tests {
 
     #[rstest]
     fn test_tick_bar_aggregator_handle_trade_when_step_count_reached(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(3, BarAggregation::Tick, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1728,7 +1728,7 @@ mod tests {
 
     #[rstest]
     fn test_tick_bar_aggregator_aggregates_to_step_size(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(3, BarAggregation::Tick, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1774,7 +1774,7 @@ mod tests {
 
     #[rstest]
     fn test_tick_bar_aggregator_resets_after_bar_created(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(2, BarAggregation::Tick, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1828,7 +1828,7 @@ mod tests {
 
     #[rstest]
     fn test_volume_bar_aggregator_builds_multiple_bars_from_large_update(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(10, BarAggregation::Volume, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1861,7 +1861,7 @@ mod tests {
 
     #[rstest]
     fn test_value_bar_aggregator_builds_at_value_threshold(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1000, BarAggregation::Value, PriceType::Last); // $1000 value step
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1898,7 +1898,7 @@ mod tests {
 
     #[rstest]
     fn test_value_bar_aggregator_handles_large_update(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1000, BarAggregation::Value, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -1930,7 +1930,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_builds_at_interval(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         // One second bars
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
@@ -1982,7 +1982,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_left_open_interval(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -2044,7 +2044,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_right_open_interval(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -2106,7 +2106,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_no_updates_behavior(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let handler = Arc::new(Mutex::new(Vec::new()));
@@ -2191,7 +2191,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_respects_timestamp_on_close(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let clock = Rc::new(RefCell::new(TestClock::new()));
@@ -2234,7 +2234,7 @@ mod tests {
 
     #[rstest]
     fn test_time_bar_aggregator_batches_updates(equity_aapl: Equity) {
-        let instrument = InstrumentAny::Equity(equity_aapl);
+        let instrument = InstrumentEnum::Equity(equity_aapl);
         let bar_spec = BarSpecification::new(1, BarAggregation::Second, PriceType::Last);
         let bar_type = BarType::new(instrument.id(), bar_spec, AggregationSource::Internal);
         let clock = Rc::new(RefCell::new(TestClock::new()));

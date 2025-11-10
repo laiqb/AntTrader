@@ -133,7 +133,7 @@ mod tests {
             AccountId, ClientOrderId, InstrumentId, PositionId, StrategyId, TradeId, TraderId,
             VenueOrderId,
         },
-        instruments::{InstrumentAny, stubs::audusd_sim},
+        instruments::{InstrumentEnum, stubs::audusd_sim},
         position::Position,
         types::{Currency, Money, Price, Quantity},
     };
@@ -241,7 +241,7 @@ mod tests {
     fn test_position_snapshot_from() {
         let instrument = audusd_sim();
         let fill = create_test_order_filled();
-        let position = Position::new(&InstrumentAny::CurrencyPair(instrument), fill);
+        let position = Position::new(&InstrumentEnum::CurrencyPair(instrument), fill);
         let unrealized_pnl = Some(Money::new(75.0, Currency::USD()));
 
         let snapshot = PositionSnapshot::from(&position, unrealized_pnl);
@@ -277,7 +277,7 @@ mod tests {
     fn test_position_snapshot_from_with_no_unrealized_pnl() {
         let instrument = audusd_sim();
         let fill = create_test_order_filled();
-        let position = Position::new(&InstrumentAny::CurrencyPair(instrument), fill);
+        let position = Position::new(&InstrumentEnum::CurrencyPair(instrument), fill);
 
         let snapshot = PositionSnapshot::from(&position, None);
 

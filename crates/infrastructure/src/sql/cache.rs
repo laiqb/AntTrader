@@ -33,7 +33,7 @@ use ant_model::{
         AccountId, ClientId, ClientOrderId, ComponentId, InstrumentId, PositionId, StrategyId,
         VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny, SyntheticInstrument},
+    instruments::{Instrument, InstrumentEnum, SyntheticInstrument},
     orderbook::OrderBook,
     orders::{Order, OrderAny},
     position::Position,
@@ -68,7 +68,7 @@ pub enum DatabaseQuery {
     Close,
     Add(String, Vec<u8>),
     AddCurrency(Currency),
-    AddInstrument(InstrumentAny),
+    AddInstrument(InstrumentEnum),
     AddOrder(OrderAny, Option<ClientId>, bool),
     AddOrderSnapshot(OrderSnapshot),
     AddPositionSnapshot(PositionSnapshot),
@@ -319,7 +319,7 @@ impl CacheDatabaseAdapter for PostgresCacheDatabase {
         Ok(rx.recv()?)
     }
 
-    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentAny>> {
+    async fn load_instruments(&self) -> anyhow::Result<AHashMap<InstrumentId, InstrumentEnum>> {
         let pool = self.pool.clone();
         let (tx, rx) = std::sync::mpsc::channel();
         tokio::spawn(async move {
@@ -457,7 +457,7 @@ impl CacheDatabaseAdapter for PostgresCacheDatabase {
     async fn load_instrument(
         &self,
         instrument_id: &InstrumentId,
-    ) -> anyhow::Result<Option<InstrumentAny>> {
+    ) -> anyhow::Result<Option<InstrumentEnum>> {
         let pool = self.pool.clone();
         let instrument_id = instrument_id.to_owned(); // Clone the instrument_id
         let (tx, rx) = std::sync::mpsc::channel();
@@ -584,7 +584,7 @@ impl CacheDatabaseAdapter for PostgresCacheDatabase {
         })
     }
 
-    fn add_instrument(&self, instrument: &InstrumentAny) -> anyhow::Result<()> {
+    fn add_instrument(&self, instrument: &InstrumentEnum) -> anyhow::Result<()> {
         let query = DatabaseQuery::AddInstrument(instrument.clone());
         self.tx.send(query).map_err(|e| {
             anyhow::anyhow!("Failed to send query add_instrument to database message handler: {e}")
@@ -911,45 +911,45 @@ async fn drain_buffer(pool: &PgPool, buffer: &mut VecDeque<DatabaseQuery>) {
                 DatabaseQueries::add_currency(pool, currency).await
             }
             DatabaseQuery::AddInstrument(instrument_any) => match instrument_any {
-                InstrumentAny::Betting(instrument) => {
+                InstrumentEnum::Betting(instrument) => {
                     DatabaseQueries::add_instrument(pool, "BETTING", Box::new(instrument)).await
                 }
-                InstrumentAny::BinaryOption(instrument) => {
+                InstrumentEnum::BinaryOption(instrument) => {
                     DatabaseQueries::add_instrument(pool, "BINARY_OPTION", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::CryptoFuture(instrument) => {
+                InstrumentEnum::CryptoFuture(instrument) => {
                     DatabaseQueries::add_instrument(pool, "CRYPTO_FUTURE", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::CryptoOption(instrument) => {
+                InstrumentEnum::CryptoOption(instrument) => {
                     DatabaseQueries::add_instrument(pool, "CRYPTO_OPTION", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::CryptoPerpetual(instrument) => {
+                InstrumentEnum::CryptoPerpetual(instrument) => {
                     DatabaseQueries::add_instrument(pool, "CRYPTO_PERPETUAL", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::CurrencyPair(instrument) => {
+                InstrumentEnum::CurrencyPair(instrument) => {
                     DatabaseQueries::add_instrument(pool, "CURRENCY_PAIR", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::Equity(equity) => {
+                InstrumentEnum::Equity(equity) => {
                     DatabaseQueries::add_instrument(pool, "EQUITY", Box::new(equity)).await
                 }
-                InstrumentAny::FuturesContract(instrument) => {
+                InstrumentEnum::FuturesContract(instrument) => {
                     DatabaseQueries::add_instrument(pool, "FUTURES_CONTRACT", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::FuturesSpread(instrument) => {
+                InstrumentEnum::FuturesSpread(instrument) => {
                     DatabaseQueries::add_instrument(pool, "FUTURES_SPREAD", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::OptionContract(instrument) => {
+                InstrumentEnum::OptionContract(instrument) => {
                     DatabaseQueries::add_instrument(pool, "OPTION_CONTRACT", Box::new(instrument))
                         .await
                 }
-                InstrumentAny::OptionSpread(instrument) => {
+                InstrumentEnum::OptionSpread(instrument) => {
                     DatabaseQueries::add_instrument(pool, "OPTION_SPREAD", Box::new(instrument))
                         .await
                 }

@@ -17,7 +17,7 @@ use chrono::{DateTime, Utc};
 use ant_model::{
     data::{Data, IndexPriceUpdate, MarkPriceUpdate, OrderBookDeltas},
     events::OrderEventAny,
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
 };
 use serde::{Deserialize, Serialize};
 use ustr::Ustr;
@@ -30,7 +30,7 @@ pub enum AntWsMessage {
     Data(Data),
     DataVec(Vec<Data>),
     Deltas(OrderBookDeltas),
-    Instrument(InstrumentAny),
+    Instrument(InstrumentEnum),
     OrderEvent(OrderEventAny),
     MarkPrice(MarkPriceUpdate),
     IndexPrice(IndexPriceUpdate),

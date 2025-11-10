@@ -36,7 +36,7 @@ use ant_model::{
     },
     enums::BookType,
     identifiers::{ActorId, ClientId, ComponentId, InstrumentId, TraderId, Venue},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     orderbook::OrderBook,
 };
 use ustr::Ustr;
@@ -270,7 +270,7 @@ pub trait DataActor:
     ///
     /// Returns an error if handling the instrument fails.
     #[allow(unused_variables)]
-    fn on_instrument(&mut self, instrument: &InstrumentAny) -> anyhow::Result<()> {
+    fn on_instrument(&mut self, instrument: &InstrumentEnum) -> anyhow::Result<()> {
         Ok(())
     }
 
@@ -519,7 +519,7 @@ pub trait DataActor:
     }
 
     /// Handles a received instrument.
-    fn handle_instrument(&mut self, instrument: &InstrumentAny) {
+    fn handle_instrument(&mut self, instrument: &InstrumentEnum) {
         log_received(&instrument);
 
         if self.not_running() {
@@ -851,7 +851,7 @@ pub trait DataActor:
         DataActorCore::subscribe_quotes(self, topic, handler, instrument_id, client_id, params);
     }
 
-    /// Subscribe to streaming [`InstrumentAny`] data for the `venue`.
+    /// Subscribe to streaming [`InstrumentEnum`] data for the `venue`.
     fn subscribe_instruments(
         &mut self,
         venue: Venue,
@@ -864,7 +864,7 @@ pub trait DataActor:
         let topic = get_instruments_topic(venue);
 
         let handler = ShareableMessageHandler(Rc::new(TypedMessageHandler::from(
-            move |instrument: &InstrumentAny| {
+            move |instrument: &InstrumentEnum| {
                 if let Some(actor) = try_get_actor_unchecked::<Self>(&actor_id) {
                     actor.handle_instrument(instrument);
                 } else {
@@ -876,7 +876,7 @@ pub trait DataActor:
         DataActorCore::subscribe_instruments(self, topic, handler, venue, client_id, params);
     }
 
-    /// Subscribe to streaming [`InstrumentAny`] data for the `instrument_id`.
+    /// Subscribe to streaming [`InstrumentEnum`] data for the `instrument_id`.
     fn subscribe_instrument(
         &mut self,
         instrument_id: InstrumentId,
@@ -889,7 +889,7 @@ pub trait DataActor:
         let topic = get_instrument_topic(instrument_id);
 
         let handler = ShareableMessageHandler(Rc::new(TypedMessageHandler::from(
-            move |instrument: &InstrumentAny| {
+            move |instrument: &InstrumentEnum| {
                 if let Some(actor) = try_get_actor_unchecked::<Self>(&actor_id) {
                     actor.handle_instrument(instrument);
                 } else {
@@ -1264,7 +1264,7 @@ pub trait DataActor:
         DataActorCore::unsubscribe_data(self, data_type, client_id, params);
     }
 
-    /// Unsubscribe from streaming [`InstrumentAny`] data for the `venue`.
+    /// Unsubscribe from streaming [`InstrumentEnum`] data for the `venue`.
     fn unsubscribe_instruments(
         &mut self,
         venue: Venue,
@@ -1276,7 +1276,7 @@ pub trait DataActor:
         DataActorCore::unsubscribe_instruments(self, venue, client_id, params);
     }
 
-    /// Unsubscribe from streaming [`InstrumentAny`] data for the `instrument_id`.
+    /// Unsubscribe from streaming [`InstrumentEnum`] data for the `instrument_id`.
     fn unsubscribe_instrument(
         &mut self,
         instrument_id: InstrumentId,

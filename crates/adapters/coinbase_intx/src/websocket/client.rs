@@ -32,7 +32,7 @@ use ant_core::{
 use ant_model::{
     data::{BarType, Data, OrderBookDeltas_API},
     identifiers::InstrumentId,
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
 };
 use ant_network::websocket::{MessageReader, WebSocketClient, WebSocketConfig};
 use reqwest::header::USER_AGENT;
@@ -70,7 +70,7 @@ pub struct CoinbaseIntxWebSocketClient {
     signal: Arc<AtomicBool>,
     task_handle: Option<Arc<tokio::task::JoinHandle<()>>>,
     subscriptions: Arc<DashMap<CoinbaseIntxWsChannel, AHashSet<Ustr>>>,
-    instruments_cache: Arc<AHashMap<Ustr, InstrumentAny>>,
+    instruments_cache: Arc<AHashMap<Ustr, InstrumentEnum>>,
 }
 
 impl Default for CoinbaseIntxWebSocketClient {
@@ -166,8 +166,8 @@ impl CoinbaseIntxWebSocketClient {
     }
 
     /// Initialize the instruments cache with the given `instruments`.
-    pub fn initialize_instruments_cache(&mut self, instruments: Vec<InstrumentAny>) {
-        let mut instruments_cache: AHashMap<Ustr, InstrumentAny> = AHashMap::new();
+    pub fn initialize_instruments_cache(&mut self, instruments: Vec<InstrumentEnum>) {
+        let mut instruments_cache: AHashMap<Ustr, InstrumentEnum> = AHashMap::new();
         for inst in instruments {
             instruments_cache.insert(inst.symbol().inner(), inst.clone());
         }
@@ -798,7 +798,7 @@ impl CoinbaseIntxFeedHandler {
 struct CoinbaseIntxWsMessageHandler {
     handler: CoinbaseIntxFeedHandler,
     tx: tokio::sync::mpsc::UnboundedSender<AntWsMessage>,
-    instruments_cache: AHashMap<Ustr, InstrumentAny>,
+    instruments_cache: AHashMap<Ustr, InstrumentEnum>,
 }
 
 impl CoinbaseIntxWsMessageHandler {
@@ -807,7 +807,7 @@ impl CoinbaseIntxWsMessageHandler {
         reader: MessageReader,
         signal: Arc<AtomicBool>,
         tx: tokio::sync::mpsc::UnboundedSender<AntWsMessage>,
-        instruments_cache: AHashMap<Ustr, InstrumentAny>,
+        instruments_cache: AHashMap<Ustr, InstrumentEnum>,
     ) -> Self {
         let handler = CoinbaseIntxFeedHandler::new(reader, signal);
         Self {

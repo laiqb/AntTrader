@@ -41,7 +41,7 @@ members = [
     "crates/portfolio",
     "crates/risk",
     "crates/analysis",
-    "crates/trading", "crates/option",
+    "crates/trading", "crates/option", "crates/example",
 #    "crates/app", "crates/adapters/ashare", "crates/adapters/ctp",
 ]
 

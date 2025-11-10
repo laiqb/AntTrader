@@ -23,7 +23,7 @@ use crate::{
     enums::{AccountType, LiquiditySide},
     events::account::{state::AccountState, stubs::*},
     identifiers::stubs::{account_id, uuid4},
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     types::{AccountBalance, Currency, Money, Price, Quantity},
 };
 
@@ -84,7 +84,7 @@ pub fn cash_account_multi(cash_account_state_multi: AccountState) -> CashAccount
 /// Panics if the underlying `calculate_commission` returns an error.
 #[must_use]
 pub fn calculate_commission(
-    instrument: InstrumentAny,
+    instrument: InstrumentEnum,
     quantity: Quantity,
     price: Price,
     currency: Option<Currency>,

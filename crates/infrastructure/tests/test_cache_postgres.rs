@@ -35,7 +35,7 @@ mod serial_tests {
         events::{OrderCancelRejected, OrderEventAny, OrderModifyRejected},
         identifiers::{AccountId, ClientOrderId, InstrumentId, StrategyId, TraderId, VenueOrderId},
         instruments::{
-            Instrument, InstrumentAny,
+            Instrument, InstrumentEnum,
             stubs::{crypto_perpetual_ethusdt, currency_pair_ethusdt},
         },
         orders::{Order, builder::OrderTestBuilder},
@@ -52,7 +52,7 @@ mod serial_tests {
 
         let eth = Currency::new("ETH", 2, 0, "ETH", CurrencyType::Crypto);
         let usdt = Currency::new("USDT", 2, 0, "USDT", CurrencyType::Crypto);
-        let crypto_perpetual = InstrumentAny::CryptoPerpetual(crypto_perpetual_ethusdt());
+        let crypto_perpetual = InstrumentEnum::CryptoPerpetual(crypto_perpetual_ethusdt());
 
         // Insert into database and wait
         database.add_currency(&eth).unwrap();
@@ -101,7 +101,7 @@ mod serial_tests {
             .unwrap();
         database.add_currency(&instrument.quote_currency()).unwrap();
         database
-            .add_instrument(&InstrumentAny::CurrencyPair(instrument))
+            .add_instrument(&InstrumentEnum::CurrencyPair(instrument))
             .unwrap();
 
         // Insert into database and wait

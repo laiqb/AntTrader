@@ -32,7 +32,7 @@ use ant_model::{
         AccountId, ClientOrderId, InstrumentId, OrderListId, StrategyId, Symbol, TradeId, TraderId,
         VenueOrderId,
     },
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     reports::{FillReport, OrderStatusReport, PositionStatusReport},
     types::{AccountBalance, Currency, MarginBalance, Money, Price, Quantity},
 };
@@ -637,7 +637,7 @@ pub fn parse_position_msg(msg: BitmexPositionMsg) -> PositionStatusReport {
 #[must_use]
 pub fn parse_instrument_msg(
     msg: BitmexInstrumentMsg,
-    instruments_cache: &AHashMap<Ustr, InstrumentAny>,
+    instruments_cache: &AHashMap<Ustr, InstrumentEnum>,
     ts_init: UnixNanos,
 ) -> Vec<Data> {
     let mut updates = Vec::new();
@@ -821,7 +821,7 @@ mod tests {
             TimeInForce,
         },
         identifiers::{InstrumentId, Symbol},
-        instruments::{CryptoPerpetual, any::InstrumentAny},
+        instruments::{CryptoPerpetual, any::InstrumentEnum},
         types::{Currency, Price, Quantity},
     };
     use rstest::rstest;
@@ -833,8 +833,8 @@ mod tests {
     };
 
     // Helper function to create a test perpetual instrument for tests
-    fn create_test_perpetual_instrument() -> InstrumentAny {
-        InstrumentAny::CryptoPerpetual(CryptoPerpetual::new(
+    fn create_test_perpetual_instrument() -> InstrumentEnum {
+        InstrumentEnum::CryptoPerpetual(CryptoPerpetual::new(
             InstrumentId::from("XBTUSD.BITMEX"),
             Symbol::new("XBTUSD"),
             Currency::BTC(),
@@ -1311,7 +1311,7 @@ mod tests {
         let mut instruments_cache = AHashMap::new();
         instruments_cache.insert(
             Ustr::from(".BXBT"),
-            InstrumentAny::CryptoPerpetual(instrument),
+            InstrumentEnum::CryptoPerpetual(instrument),
         );
 
         let updates = parse_instrument_msg(msg, &instruments_cache, UnixNanos::from(1));

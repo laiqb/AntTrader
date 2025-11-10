@@ -33,7 +33,7 @@ use ant_model::{
         OrderBookDepth10, QuoteTick, TradeTick, close::InstrumentClose,
     },
     identifiers::{ClientId, InstrumentId, Venue},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orderbook::OrderBook,
 };
 
@@ -87,7 +87,7 @@ pub trait LiveDataClient: DataClient {
 
     fn send_instrument_response(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         correlation_id: UUID4,
         start: Option<UnixNanos>,
         end: Option<UnixNanos>,
@@ -109,7 +109,7 @@ pub trait LiveDataClient: DataClient {
     fn send_instruments_response(
         &self,
         venue: Venue,
-        instruments: Vec<InstrumentAny>,
+        instruments: Vec<InstrumentEnum>,
         correlation_id: UUID4,
         start: Option<UnixNanos>,
         end: Option<UnixNanos>,

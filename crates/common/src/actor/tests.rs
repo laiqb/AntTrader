@@ -35,7 +35,7 @@ use ant_model::{
     },
     enums::{BookAction, BookType, OrderSide},
     identifiers::{ClientId, TraderId, Venue},
-    instruments::{CurrencyPair, InstrumentAny, stubs::*},
+    instruments::{CurrencyPair, InstrumentEnum, stubs::*},
     orderbook::OrderBook,
     types::{Price, Quantity},
 };
@@ -78,7 +78,7 @@ use crate::{
 struct TestDataActor {
     core: DataActorCore,
     pub received_time_events: Vec<TimeEvent>,
-    pub received_instruments: Vec<InstrumentAny>,
+    pub received_instruments: Vec<InstrumentEnum>,
     pub received_data: Vec<String>, // Use string for simplicity
     pub received_books: Vec<OrderBook>,
     pub received_deltas: Vec<OrderBookDelta>,
@@ -125,7 +125,7 @@ impl DataActor for TestDataActor {
         Ok(())
     }
 
-    fn on_instrument(&mut self, instrument: &InstrumentAny) -> anyhow::Result<()> {
+    fn on_instrument(&mut self, instrument: &InstrumentEnum) -> anyhow::Result<()> {
         self.received_instruments.push(instrument.clone());
         Ok(())
     }
@@ -760,7 +760,7 @@ fn test_request_instrument(
         .unwrap();
 
     let client_id = ClientId::new("TestClient");
-    let instrument = InstrumentAny::CurrencyPair(audusd_sim);
+    let instrument = InstrumentEnum::CurrencyPair(audusd_sim);
     let data = instrument.clone();
     let ts_init = UnixNanos::default();
     let response = InstrumentResponse::new(

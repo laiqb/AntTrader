@@ -21,7 +21,7 @@ use ant_model::{
     },
     enums::{AggregationSource, AggressorSide, BookAction, OrderSide, RecordFlag},
     identifiers::{InstrumentId, Symbol, TradeId},
-    instruments::{CryptoPerpetual, CurrencyPair, any::InstrumentAny},
+    instruments::{CryptoPerpetual, CurrencyPair, any::InstrumentEnum},
     types::{Price, Quantity},
 };
 use rust_decimal::Decimal;
@@ -49,7 +49,7 @@ pub fn parse_spot_instrument(
     maker_fee: Option<Decimal>,
     taker_fee: Option<Decimal>,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.product_id);
     let raw_symbol = Symbol::from_ustr_unchecked(definition.product_id);
 
@@ -93,7 +93,7 @@ pub fn parse_spot_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CurrencyPair(instrument))
+    Ok(InstrumentEnum::CurrencyPair(instrument))
 }
 
 /// Parses a Coinbase perpetual instrument into an `InstrumentAny::CryptoPerpetual`.
@@ -109,7 +109,7 @@ pub fn parse_perp_instrument(
     maker_fee: Option<Decimal>,
     taker_fee: Option<Decimal>,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.product_id);
     let raw_symbol = Symbol::from_ustr_unchecked(definition.product_id);
 
@@ -157,14 +157,14 @@ pub fn parse_perp_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CryptoPerpetual(instrument))
+    Ok(InstrumentEnum::CryptoPerpetual(instrument))
 }
 
 #[must_use]
 pub fn parse_instrument_any(
     instrument: &CoinbaseIntxWsInstrumentMsg,
     ts_init: UnixNanos,
-) -> Option<InstrumentAny> {
+) -> Option<InstrumentEnum> {
     let result = match instrument.instrument_type {
         CoinbaseIntxInstrumentType::Spot => {
             parse_spot_instrument(instrument, None, None, None, None, ts_init).map(Some)

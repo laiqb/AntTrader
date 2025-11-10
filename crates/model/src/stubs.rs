@@ -22,7 +22,7 @@ use crate::{
     data::order::BookOrder,
     enums::{BookType, LiquiditySide, OrderSide, OrderType},
     identifiers::InstrumentId,
-    instruments::{CurrencyPair, Instrument, InstrumentAny, stubs::audusd_sim},
+    instruments::{CurrencyPair, Instrument, InstrumentEnum, stubs::audusd_sim},
     orderbook::OrderBook,
     orders::{builder::OrderTestBuilder, stubs::TestOrderEventStubs},
     position::Position,
@@ -37,7 +37,7 @@ use crate::{
 /// - The liquidity side is `NoLiquiditySide`.
 /// - `instrument.maker_fee()` or `instrument.taker_fee()` cannot be converted to `f64`.
 pub fn calculate_commission(
-    instrument: &InstrumentAny,
+    instrument: &InstrumentEnum,
     last_qty: Quantity,
     last_px: Price,
     use_quote_for_inverse: Option<bool>,
@@ -67,7 +67,7 @@ pub fn calculate_commission(
 
 #[fixture]
 pub fn stub_position_long(audusd_sim: CurrencyPair) -> Position {
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
     let order = OrderTestBuilder::new(OrderType::Market)
         .instrument_id(audusd_sim.id())
         .side(OrderSide::Buy)
@@ -90,7 +90,7 @@ pub fn stub_position_long(audusd_sim: CurrencyPair) -> Position {
 
 #[fixture]
 pub fn stub_position_short(audusd_sim: CurrencyPair) -> Position {
-    let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+    let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
     let order = OrderTestBuilder::new(OrderType::Market)
         .instrument_id(audusd_sim.id())
         .side(OrderSide::Sell)

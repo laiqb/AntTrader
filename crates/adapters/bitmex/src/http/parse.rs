@@ -23,7 +23,7 @@ use ant_model::{
     identifiers::{
         AccountId, ClientOrderId, InstrumentId, OrderListId, Symbol, TradeId, VenueOrderId,
     },
-    instruments::{CryptoFuture, CryptoPerpetual, CurrencyPair, InstrumentAny},
+    instruments::{CryptoFuture, CryptoPerpetual, CurrencyPair, InstrumentEnum},
     reports::{FillReport, OrderStatusReport, PositionStatusReport},
     types::{Currency, Money, Price, Quantity},
 };
@@ -44,7 +44,7 @@ use crate::common::{
 pub fn parse_instrument_any(
     instrument: &BitmexInstrument,
     ts_init: UnixNanos,
-) -> Option<InstrumentAny> {
+) -> Option<InstrumentEnum> {
     match instrument.instrument_type {
         BitmexInstrumentType::Spot => parse_spot_instrument(instrument, ts_init)
             .map_err(|e| {
@@ -113,7 +113,7 @@ pub fn parse_instrument_any(
 pub fn parse_index_instrument(
     definition: &BitmexInstrument,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::new(definition.symbol);
 
@@ -124,7 +124,7 @@ pub fn parse_index_instrument(
     let price_increment = Price::from(definition.tick_size.to_string());
     let size_increment = Quantity::from(1); // Indices don't have tradeable sizes
 
-    Ok(InstrumentAny::CryptoPerpetual(CryptoPerpetual::new(
+    Ok(InstrumentEnum::CryptoPerpetual(CryptoPerpetual::new(
         instrument_id,
         raw_symbol,
         base_currency,
@@ -160,7 +160,7 @@ pub fn parse_index_instrument(
 pub fn parse_spot_instrument(
     definition: &BitmexInstrument,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::new(definition.symbol);
     let base_currency = get_currency(definition.underlying.to_uppercase());
@@ -243,7 +243,7 @@ pub fn parse_spot_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CurrencyPair(instrument))
+    Ok(InstrumentEnum::CurrencyPair(instrument))
 }
 
 /// Parse a BitMEX perpetual instrument into a ant `InstrumentAny`.
@@ -254,7 +254,7 @@ pub fn parse_spot_instrument(
 pub fn parse_perpetual_instrument(
     definition: &BitmexInstrument,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::new(definition.symbol);
     let base_currency = get_currency(definition.underlying.to_uppercase());
@@ -346,7 +346,7 @@ pub fn parse_perpetual_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CryptoPerpetual(instrument))
+    Ok(InstrumentEnum::CryptoPerpetual(instrument))
 }
 
 /// Parse a BitMEX futures instrument into a ant `InstrumentAny`.
@@ -357,7 +357,7 @@ pub fn parse_perpetual_instrument(
 pub fn parse_futures_instrument(
     definition: &BitmexInstrument,
     ts_init: UnixNanos,
-) -> anyhow::Result<InstrumentAny> {
+) -> anyhow::Result<InstrumentEnum> {
     let instrument_id = parse_instrument_id(definition.symbol);
     let raw_symbol = Symbol::new(definition.symbol);
     let underlying = get_currency(definition.underlying.to_uppercase());
@@ -454,7 +454,7 @@ pub fn parse_futures_instrument(
         ts_init,
     );
 
-    Ok(InstrumentAny::CryptoFuture(instrument))
+    Ok(InstrumentEnum::CryptoFuture(instrument))
 }
 
 /// Parse a BitMEX trade into a ant `TradeTick`.
@@ -1841,7 +1841,7 @@ mod tests {
 
         // Check it's a CurrencyPair variant
         match result {
-            ant_model::instruments::InstrumentAny::CurrencyPair(spot) => {
+            ant_model::instruments::InstrumentEnum::CurrencyPair(spot) => {
                 assert_eq!(spot.id.symbol.as_str(), "XBTUSD");
                 assert_eq!(spot.id.venue.as_str(), "BITMEX");
                 assert_eq!(spot.raw_symbol.as_str(), "XBTUSD");
@@ -1864,7 +1864,7 @@ mod tests {
 
         // Check it's a CryptoPerpetual variant
         match result {
-            ant_model::instruments::InstrumentAny::CryptoPerpetual(perp) => {
+            ant_model::instruments::InstrumentEnum::CryptoPerpetual(perp) => {
                 assert_eq!(perp.id.symbol.as_str(), "XBTUSD");
                 assert_eq!(perp.id.venue.as_str(), "BITMEX");
                 assert_eq!(perp.raw_symbol.as_str(), "XBTUSD");
@@ -1888,7 +1888,7 @@ mod tests {
 
         // Check it's a CryptoFuture variant
         match result {
-            ant_model::instruments::InstrumentAny::CryptoFuture(instrument) => {
+            ant_model::instruments::InstrumentEnum::CryptoFuture(instrument) => {
                 assert_eq!(instrument.id.symbol.as_str(), "XBTH25");
                 assert_eq!(instrument.id.venue.as_str(), "BITMEX");
                 assert_eq!(instrument.raw_symbol.as_str(), "XBTH25");

@@ -44,7 +44,7 @@ use rust_decimal_macros::dec;
 use ustr::Ustr;
 
 pub use crate::instruments::{
-    any::InstrumentAny, betting::BettingInstrument, binary_option::BinaryOption,
+    any::InstrumentEnum, betting::BettingInstrument, binary_option::BinaryOption,
     crypto_future::CryptoFuture, crypto_option::CryptoOption, crypto_perpetual::CryptoPerpetual,
     currency_pair::CurrencyPair, equity::Equity, futures_contract::FuturesContract,
     futures_spread::FuturesSpread, option_contract::OptionContract, option_spread::OptionSpread,
@@ -247,10 +247,10 @@ pub trait Instrument: 'static + Send {
         None
     }
 
-    fn into_any(self) -> InstrumentAny
+    fn into_any(self) -> InstrumentEnum
     where
         Self: Sized,
-        InstrumentAny: From<Self>,
+        InstrumentEnum: From<Self>,
     {
         self.into()
     }

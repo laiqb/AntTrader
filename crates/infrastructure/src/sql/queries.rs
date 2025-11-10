@@ -25,7 +25,7 @@ use ant_model::{
         position::snapshot::PositionSnapshot,
     },
     identifiers::{AccountId, ClientId, ClientOrderId, InstrumentId, PositionId},
-    instruments::{Instrument, InstrumentAny},
+    instruments::{Instrument, InstrumentEnum},
     orders::{Order, OrderAny},
     types::{AccountBalance, Currency, MarginBalance},
 };
@@ -219,7 +219,7 @@ impl DatabaseQueries {
     pub async fn load_instrument(
         pool: &PgPool,
         instrument_id: &InstrumentId,
-    ) -> anyhow::Result<Option<InstrumentAny>> {
+    ) -> anyhow::Result<Option<InstrumentEnum>> {
         sqlx::query_as::<_, InstrumentAnyModel>("SELECT * FROM instrument WHERE id = $1")
             .bind(instrument_id.to_string())
             .fetch_optional(pool)
@@ -235,7 +235,7 @@ impl DatabaseQueries {
     /// # Errors
     ///
     /// Returns an error if the SELECT operation fails.
-    pub async fn load_instruments(pool: &PgPool) -> anyhow::Result<Vec<InstrumentAny>> {
+    pub async fn load_instruments(pool: &PgPool) -> anyhow::Result<Vec<InstrumentEnum>> {
         sqlx::query_as::<_, InstrumentAnyModel>("SELECT * FROM instrument")
             .fetch_all(pool)
             .await

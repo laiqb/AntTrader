@@ -29,7 +29,7 @@ use crate::{
     enums::{AccountType, LiquiditySide, OrderSide},
     events::{AccountState, OrderFilled},
     identifiers::AccountId,
-    instruments::InstrumentAny,
+    instruments::InstrumentEnum,
     position::Position,
     types::{AccountBalance, Currency, Money, Price, Quantity},
 };
@@ -202,7 +202,7 @@ impl Account for CashAccount {
 
     fn calculate_balance_locked(
         &mut self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         side: OrderSide,
         quantity: Quantity,
         price: Price,
@@ -213,7 +213,7 @@ impl Account for CashAccount {
 
     fn calculate_pnls(
         &self,
-        instrument: InstrumentAny, // TODO: Make this a reference
+        instrument: InstrumentEnum, // TODO: Make this a reference
         fill: OrderFilled,         // TODO: Make this a reference
         position: Option<Position>,
     ) -> anyhow::Result<Vec<Money>> {
@@ -222,7 +222,7 @@ impl Account for CashAccount {
 
     fn calculate_commission(
         &self,
-        instrument: InstrumentAny,
+        instrument: InstrumentEnum,
         last_qty: Quantity,
         last_px: Price,
         liquidity_side: LiquiditySide,
@@ -289,7 +289,7 @@ mod tests {
         enums::{AccountType, LiquiditySide, OrderSide, OrderType},
         events::{AccountState, account::stubs::*},
         identifiers::{AccountId, position_id::PositionId},
-        instruments::{CryptoPerpetual, CurrencyPair, Equity, Instrument, InstrumentAny, stubs::*},
+        instruments::{CryptoPerpetual, CurrencyPair, Equity, Instrument, InstrumentEnum, stubs::*},
         orders::{builder::OrderTestBuilder, stubs::TestOrderEventStubs},
         position::Position,
         types::{Currency, Money, Price, Quantity},
@@ -494,7 +494,7 @@ mod tests {
         cash_account_million_usd: CashAccount,
         audusd_sim: CurrencyPair,
     ) {
-        let audusd_sim = InstrumentAny::CurrencyPair(audusd_sim);
+        let audusd_sim = InstrumentEnum::CurrencyPair(audusd_sim);
         let order = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(audusd_sim.id())
             .side(OrderSide::Buy)
@@ -524,7 +524,7 @@ mod tests {
         cash_account_multi: CashAccount,
         currency_pair_btcusdt: CurrencyPair,
     ) {
-        let btcusdt = InstrumentAny::CurrencyPair(currency_pair_btcusdt);
+        let btcusdt = InstrumentEnum::CurrencyPair(currency_pair_btcusdt);
         let order1 = OrderTestBuilder::new(OrderType::Market)
             .instrument_id(currency_pair_btcusdt.id)
             .side(OrderSide::Sell)

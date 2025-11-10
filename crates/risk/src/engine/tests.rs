@@ -51,7 +51,7 @@ use ant_model::{
         },
     },
     instruments::{
-        CryptoPerpetual, CurrencyPair, Instrument, InstrumentAny,
+        CryptoPerpetual, CurrencyPair, Instrument, InstrumentEnum,
         stubs::{audusd_sim, crypto_perpetual_ethusdt, xbtusd_bitmex},
     },
     orders::{Order, OrderAny, OrderList, OrderTestBuilder},
@@ -78,7 +78,7 @@ fn test_deny_order_on_price_precision_exceeded(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
 ) {
     // Register collector for denied events
@@ -139,7 +139,7 @@ fn test_deny_order_exceeding_max_notional(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
 ) {
     let process_handler = register_process_handler();
@@ -243,7 +243,7 @@ fn max_notional_per_order() -> HashMap<InstrumentId, Decimal> {
 
 // Market buy order with corresponding fill
 #[fixture]
-fn market_order_buy(instrument_eth_usdt: InstrumentAny) -> OrderAny {
+fn market_order_buy(instrument_eth_usdt: InstrumentEnum) -> OrderAny {
     OrderTestBuilder::new(OrderType::Market)
         .instrument_id(instrument_eth_usdt.id())
         .side(OrderSide::Buy)
@@ -253,7 +253,7 @@ fn market_order_buy(instrument_eth_usdt: InstrumentAny) -> OrderAny {
 
 // Market sell order
 #[fixture]
-fn market_order_sell(instrument_eth_usdt: InstrumentAny) -> OrderAny {
+fn market_order_sell(instrument_eth_usdt: InstrumentEnum) -> OrderAny {
     OrderTestBuilder::new(OrderType::Market)
         .instrument_id(instrument_eth_usdt.id())
         .side(OrderSide::Sell)
@@ -268,7 +268,7 @@ fn get_stub_submit_order(
     strategy_id_ema_cross: StrategyId,
     client_order_id: ClientOrderId,
     venue_order_id: VenueOrderId,
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
 ) -> SubmitOrder {
     SubmitOrder::new(
         trader_id,
@@ -339,23 +339,23 @@ fn get_execute_order_event_handler_messages(
 }
 
 #[fixture]
-fn instrument_eth_usdt(crypto_perpetual_ethusdt: CryptoPerpetual) -> InstrumentAny {
-    InstrumentAny::CryptoPerpetual(crypto_perpetual_ethusdt)
+fn instrument_eth_usdt(crypto_perpetual_ethusdt: CryptoPerpetual) -> InstrumentEnum {
+    InstrumentEnum::CryptoPerpetual(crypto_perpetual_ethusdt)
 }
 
 #[fixture]
-fn instrument_xbtusd_bitmex(xbtusd_bitmex: CryptoPerpetual) -> InstrumentAny {
-    InstrumentAny::CryptoPerpetual(xbtusd_bitmex)
+fn instrument_xbtusd_bitmex(xbtusd_bitmex: CryptoPerpetual) -> InstrumentEnum {
+    InstrumentEnum::CryptoPerpetual(xbtusd_bitmex)
 }
 
 #[fixture]
-fn instrument_audusd(audusd_sim: CurrencyPair) -> InstrumentAny {
-    InstrumentAny::CurrencyPair(audusd_sim)
+fn instrument_audusd(audusd_sim: CurrencyPair) -> InstrumentEnum {
+    InstrumentEnum::CurrencyPair(audusd_sim)
 }
 
 #[fixture]
-pub fn instrument_xbtusd_with_high_size_precision() -> InstrumentAny {
-    InstrumentAny::CryptoPerpetual(CryptoPerpetual::new(
+pub fn instrument_xbtusd_with_high_size_precision() -> InstrumentEnum {
+    InstrumentEnum::CryptoPerpetual(CryptoPerpetual::new(
         InstrumentId::from("BTCUSDT.BITMEX"),
         Symbol::from("XBTUSD"),
         Currency::BTC(),
@@ -443,7 +443,7 @@ fn order_accepted(order: &OrderAny, venue_order_id: Option<VenueOrderId>) -> Ord
 
 fn order_filled(
     order: &OrderAny,
-    instrument: &InstrumentAny,
+    instrument: &InstrumentEnum,
     strategy_id: Option<StrategyId>,
     account_id: Option<AccountId>,
     venue_order_id: Option<VenueOrderId>,
@@ -557,7 +557,7 @@ fn test_max_notionals_per_order_when_no_risk_config_returns_empty_hashmap() {
 }
 
 #[rstest]
-fn test_set_max_notional_per_order_changes_setting(instrument_audusd: InstrumentAny) {
+fn test_set_max_notional_per_order_changes_setting(instrument_audusd: InstrumentEnum) {
     let mut risk_engine = get_risk_engine(None, None, None, false);
 
     risk_engine
@@ -574,7 +574,7 @@ fn test_given_random_command_then_logs_and_continues(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
 ) {
     let mut risk_engine = get_risk_engine(None, None, None, false);
@@ -607,7 +607,7 @@ fn test_given_random_command_then_logs_and_continues(
 }
 
 #[rstest]
-fn test_given_random_event_then_logs_and_continues(instrument_audusd: InstrumentAny) {
+fn test_given_random_event_then_logs_and_continues(instrument_audusd: InstrumentEnum) {
     let mut risk_engine = get_risk_engine(None, None, None, false);
 
     let order = OrderTestBuilder::new(OrderType::Limit)
@@ -638,7 +638,7 @@ fn test_submit_order_with_default_settings_then_sends_to_client(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -707,7 +707,7 @@ fn test_submit_order_when_risk_bypassed_sends_to_execution_engine(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -762,7 +762,7 @@ fn test_submit_reduce_only_order_when_position_already_closed_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -909,7 +909,7 @@ fn test_submit_reduce_only_order_when_position_would_be_increased_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -1032,7 +1032,7 @@ fn test_submit_order_reduce_only_order_with_custom_position_id_not_open_then_den
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1103,7 +1103,7 @@ fn test_submit_order_when_instrument_not_in_cache_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1168,7 +1168,7 @@ fn test_submit_order_when_invalid_price_precision_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1241,7 +1241,7 @@ fn test_submit_order_when_invalid_negative_price_and_not_option_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1310,7 +1310,7 @@ fn test_submit_order_when_invalid_trigger_price_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1382,7 +1382,7 @@ fn test_submit_order_when_invalid_quantity_precision_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1450,7 +1450,7 @@ fn test_submit_order_when_invalid_quantity_exceeds_maximum_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1518,7 +1518,7 @@ fn test_submit_order_when_invalid_quantity_less_than_minimum_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1586,7 +1586,7 @@ fn test_submit_order_when_market_order_and_no_market_then_logs_warning(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     execute_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1653,7 +1653,7 @@ fn test_submit_order_when_less_than_min_notional_for_instrument_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_with_high_size_precision: InstrumentAny,
+    instrument_xbtusd_with_high_size_precision: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -1739,7 +1739,7 @@ fn test_submit_order_when_greater_than_max_notional_for_instrument_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     bitmex_cash_account_state_multi: AccountState,
@@ -1823,7 +1823,7 @@ fn test_submit_order_when_buy_market_order_and_over_max_notional_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1905,7 +1905,7 @@ fn test_submit_order_when_sell_market_order_and_over_max_notional_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -1987,7 +1987,7 @@ fn test_submit_order_when_market_order_and_over_free_balance_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -2057,7 +2057,7 @@ fn test_submit_order_list_buys_when_over_free_balance_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -2143,7 +2143,7 @@ fn test_submit_order_list_sells_when_over_free_balance_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -2234,7 +2234,7 @@ fn test_submit_order_when_reducing_and_buy_order_adds_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -2354,7 +2354,7 @@ fn test_submit_order_when_reducing_and_sell_order_adds_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -2472,7 +2472,7 @@ fn test_submit_order_when_trading_halted_then_denies_order(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_eth_usdt: InstrumentAny,
+    instrument_eth_usdt: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     mut simple_cache: Cache,
@@ -2531,7 +2531,7 @@ fn test_submit_order_beyond_rate_limit_then_denies_order(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -2599,7 +2599,7 @@ fn test_submit_order_list_when_trading_halted_then_denies_orders(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -2686,7 +2686,7 @@ fn test_submit_order_list_buys_when_trading_reducing_then_denies_orders(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -2814,7 +2814,7 @@ fn test_submit_order_list_sells_when_trading_reducing_then_denies_orders(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -2942,7 +2942,7 @@ fn test_submit_bracket_with_default_settings_sends_to_client(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -3025,7 +3025,7 @@ fn test_submit_bracket_order_when_instrument_not_in_cache_then_denies(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -3113,7 +3113,7 @@ fn test_modify_order_when_no_order_found_logs_error(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -3165,7 +3165,7 @@ fn test_modify_order_beyond_rate_limit_then_rejects(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -3239,7 +3239,7 @@ fn test_modify_order_with_default_settings_then_sends_to_client(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -3329,7 +3329,7 @@ fn test_submit_order_when_market_order_and_over_free_balance_then_denies_with_be
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_audusd: InstrumentAny,
+    instrument_audusd: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     cash_account_state_million_usd: AccountState,
@@ -3389,7 +3389,7 @@ fn test_submit_order_for_less_than_max_cum_transaction_value_adausdt_with_crypto
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
@@ -3474,7 +3474,7 @@ fn test_submit_order_with_gtd_expire_time_already_passed(
     client_id_binance: ClientId,
     trader_id: TraderId,
     client_order_id: ClientOrderId,
-    instrument_xbtusd_bitmex: InstrumentAny,
+    instrument_xbtusd_bitmex: InstrumentEnum,
     venue_order_id: VenueOrderId,
     process_order_event_handler: ShareableMessageHandler,
     execute_order_event_handler: ShareableMessageHandler,
