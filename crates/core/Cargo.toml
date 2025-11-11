@@ -8,8 +8,15 @@ rust-version.workspace = true
 name = "ant_core"
 crate-type = ["rlib", "staticlib"]
 
-[features]
-
+#[features]
+#default = []
+#extension-module = ["pyo3/extension-module"]
+#ffi = ["cbindgen"]
+#python = ["pyo3", "strum"]
+#
+#[package.metadata.docs.rs]
+#all-features = true
+#rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 uuid = { workspace = true }

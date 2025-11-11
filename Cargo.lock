@@ -620,6 +620,7 @@ version = "0.50.0"
 dependencies = [
  "ahash 0.8.12",
  "anyhow",
+ "cbindgen",
  "criterion 0.5.1",
  "indexmap",
  "pyo3",
@@ -630,6 +631,8 @@ dependencies = [
  "serde",
  "serde_json",
  "statrs",
+ "strum",
+ "toml 0.9.8",
  "uuid",
 ]
 
@@ -692,6 +695,7 @@ dependencies = [
 name = "ant-pyo3"
 version = "0.50.0"
 dependencies = [
+ "ant-option",
  "pyo3",
  "pyo3-stub-gen",
 ]
