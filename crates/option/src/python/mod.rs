@@ -1,13 +1,21 @@
 pub mod greeks;
 
-use pyo3::{
-    conversion::IntoPyObjectExt,
-    exceptions::{PyRuntimeError, PyTypeError, PyValueError},
-    prelude::*,
-    types::PyString,
-    wrap_pyfunction,
-};
+use pyo3::prelude::*;
 
-use crate::{
-    
+#[pymodule]
+pub fn model(_:Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<crate::greeks::ImplyVolAndGreeksResult>()?;
+    m.add_class::<crate::greeks::BlackScholesGreeksResult>()?;
+
+    m.add_function(wrap_pyfunction!(
+        crate::python::greeks::py_black_scholes_greeks,
+        m
+    )?)?;
+
+    m.add_function(wrap_pyfunction!(
+        crate::python::greeks::py_imply_vol,
+        m
+    )?)?;
+    Ok(())
 }
+

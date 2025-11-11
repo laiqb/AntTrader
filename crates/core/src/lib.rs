@@ -15,6 +15,9 @@ pub mod env;
 pub mod ffi;
 pub mod parsing;
 
+#[cfg(feature = "python")]
+pub mod python;
+
 pub use crate::{
     drop::CleanDrop,
     uuid::UUID4,
