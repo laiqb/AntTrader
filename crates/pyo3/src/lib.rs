@@ -217,6 +217,8 @@ fn re_export_module_attributes(
 pub fn stub_info() -> pyo3_stub_gen::Result<pyo3_stub_gen::StubInfo> {
     let workspace_root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
+        .unwrap()
+        .parent()
         .unwrap();
     let pyproject_path = workspace_root.join("python").join("pyproject.toml");
 

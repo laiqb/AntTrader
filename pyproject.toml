@@ -3,7 +3,7 @@ name = "ant_trader"
 version = "1.220.0"
 description = "A high-performance algorithmic trading platform and event-driven backtester"
 authors = [
-    {name = "ANT Systems", email = "info@nautechsystems.io"},
+    {name = "ANT Systems"},
 ]
 classifiers = [
     "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
@@ -24,7 +24,7 @@ classifiers = [
 ]
 license = {text = "LGPL-3.0-or-later"}
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.8,<3.14"
 dependencies = [
     "click>=8.0.0,<9.0.0",
     "fsspec>=2025.2.0,<2026.0.0",
@@ -38,10 +38,7 @@ dependencies = [
     "uvloop>=0.21.0,<1.0.0; sys_platform != \"win32\"",
 ]
 
-[project.urls]
-homepage = "https://nautilustrader.io"
-repository = "https://github.com/nautechsystems/nautilus_trader"
-docs = "https://nautilustrader.io/docs"
+#[project.urls]
 
 # For now we use the poetry build backend until uv supports custom build scripts
 [build-system]
@@ -60,14 +57,14 @@ include = [
     { path = "Cargo.lock", format = "sdist" },
     { path = "Cargo.toml", format = "sdist" },
     # Compiled extensions must be included in the wheel distributions
-    { path = "nautilus_trader/**/*.so", format = "wheel" },
-    { path = "nautilus_trader/**/*.pyd", format = "wheel" },
+    { path = "ant_trader/**/*.so", format = "wheel" },
+    { path = "ant_trader/**/*.pyd", format = "wheel" },
     # Include the py.typed file for type checking support
-    { path = "nautilus_trader/py.typed", format = "sdist" },
-    { path = "nautilus_trader/py.typed", format = "wheel" },
+    { path = "ant_trader/py.typed", format = "sdist" },
+    { path = "ant_trader/py.typed", format = "wheel" },
     # Include Python interface files for type checking support
-    { path = "nautilus_trader/**/*.pyi", format = "sdist" },
-    { path = "nautilus_trader/**/*.pyi", format = "wheel" },
+    { path = "ant_trader/**/*.pyi", format = "sdist" },
+    { path = "ant_trader/**/*.pyi", format = "wheel" },
 ]
 
 [tool.poetry.build]
@@ -265,10 +262,10 @@ warn_unused_ignores = true
 no_strict_optional = true
 module = [
     "examples/*",
-    "nautilus_trader/adapters/betfair/*",
-    "nautilus_trader/adapters/binance/*",
-    "nautilus_trader/adapters/interactive_brokers/*",
-    "nautilus_trader/indicators/ta_lib/*",
+    "ant_trader/adapters/betfair/*",
+    "ant_trader/adapters/binance/*",
+    "ant_trader/adapters/interactive_brokers/*",
+    "ant_trader/indicators/ta_lib/*",
 ]
 
 [tool.pytest.ini_options]
@@ -282,11 +279,11 @@ filterwarnings = [
 
 [tool.coverage.run]
 plugins = ["Cython.Coverage"]
-source = ["nautilus_trader"]
+source = ["ant_trader"]
 omit = [
-    "nautilus_trader/adapters/*",
-    "nautilus_trader/examples/*",
-    "nautilus_trader/test_kit/*",
+    "ant_trader/adapters/*",
+    "ant_trader/examples/*",
+    "ant_trader/test_kit/*",
 ]
 
 [tool.coverage.report]
