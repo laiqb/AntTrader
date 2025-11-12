@@ -148,6 +148,7 @@ pyo3 = { version = "0.25.1", default-features = false, features = [
   "macros",
   "rust_decimal",
   "serde",
+  "extension-module"
 ] }
 pyo3-async-runtimes = { version = "0.25.0", default-features = false, features = [
   "attributes",

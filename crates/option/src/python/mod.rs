@@ -2,7 +2,7 @@ pub mod greeks;
 
 use pyo3::prelude::*;
 #[pymodule]
-pub fn python(_:Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn option(_:Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     m.add_class::<crate::greeks::ImplyVolAndGreeksResult>()?;
     m.add_class::<crate::greeks::BlackScholesGreeksResult>()?;
