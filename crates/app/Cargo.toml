@@ -1,0 +1,15 @@
+[package]
+name = "ant-app"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus = { workspace = true }
+serde = { workspace = true }
+ant-model = {workspace = true}
+rand = {workspace = true}
+
+[[bin]]
+name = "ant-app"
+path = "src/main.rs"

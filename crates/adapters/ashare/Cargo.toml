@@ -1,0 +1,19 @@
+[package]
+name = "ant-ashare"
+readme = "README.md"
+publish = false  # Do not publish to crates.io yet
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description.workspace = true
+categories.workspace = true
+keywords.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lib]
+name = "ant_share"
+crate-type = ["rlib", "cdylib"]

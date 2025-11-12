@@ -1,0 +1,88 @@
+[package]
+name = "ant-pyo3"
+readme = "README.md"
+publish = false  # Do not publish to crates.io
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+
+[lib]
+name = "ant_pyo3"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+cython-compat = []
+defi = [
+#  "dep:ant-blockchain",
+#  "ant-blockchain/python",
+]
+extension-module = [
+#  "ant-bitmex/extension-module",
+#  "ant-blockchain?/extension-module",
+#  "ant-coinbase-intx/extension-module",
+#  "ant-common/extension-module",
+#  "ant-core/extension-module",
+#  "ant-cryptography/extension-module",
+#  "ant-databento/extension-module",
+#  "ant-execution/extension-module",
+#  "ant-indicators/extension-module",
+#  "ant-infrastructure/extension-module",
+#  "ant-live/extension-module",
+#  "ant-model/extension-module",
+#  "ant-okx/extension-module",
+#  "ant-persistence/extension-module",
+#  "ant-serialization/extension-module",
+#  "ant-tardis/extension-module",
+#  "ant-testkit/extension-module",
+#  "ant-trading/extension-module",
+#  "pyo3/extension-module",
+    "ant-option/extension-module"
+]
+#ffi = [
+#  "ant-common/ffi",
+#  "ant-core/ffi",
+#  "ant-model/ffi",
+#  "ant-persistence/ffi",
+#]
+#high-precision = [
+#  "ant-model/high-precision",
+#  "ant-serialization/high-precision",
+#]
+#hypersync = ["ant-blockchain/hypersync"]
+#postgres = ["ant-infrastructure/postgres"]
+#redis = ["ant-infrastructure/redis"]
+
+[dependencies]
+#ant-common = { workspace = true, features = ["python"] }
+#ant-core = { workspace = true, features = ["python"] }
+#ant-cryptography = { workspace = true, features = ["python"] }
+#ant-execution = { workspace = true, features = ["python"] }
+##ant-indicators = { workspace = true, features = ["python"] }
+#ant-infrastructure = { workspace = true, features = ["python"] }
+#ant-live = { workspace = true, features = ["python"] }
+#ant-model = { workspace = true, features = ["python"] }
+#ant-network = { workspace = true, features = ["python"] }
+#ant-persistence = { workspace = true, features = ["python"] }
+#ant-serialization = { workspace = true, features = ["python"] }
+#ant-testkit = { workspace = true, features = ["python"] }
+#ant-trading = { workspace = true, features = ["python"] }
+ant-option = { workspace = true, features = ["python"]  }
+
+# Adapters
+#ant-bitmex = { workspace = true, features = ["python"] }
+#ant-blockchain = { workspace = true, features = ["python"], optional = true }
+#ant-coinbase-intx = { workspace = true, features = ["python"] }
+#ant-databento = { workspace = true, features = ["python"] }
+#ant-hyperliquid = { workspace = true, features = ["python"] }
+#ant-okx = { workspace = true, features = ["python"] }
+#ant-tardis = { workspace = true, features = ["python"] }
+
+pyo3 = { workspace = true }
+pyo3-stub-gen = { workspace = true }
+
+# Run with `cargo run --bin python-stub-gen`
+[[bin]]
+name = "python-stub-gen"
+path = "bin/stub_gen.rs"

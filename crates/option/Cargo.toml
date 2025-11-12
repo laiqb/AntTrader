@@ -1,0 +1,57 @@
+[package]
+name = "ant-option"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "ant_option"
+crate-type = ["rlib", "staticlib", "cdylib"]
+
+
+[features]
+default = []
+extension-module = ["pyo3/extension-module"]
+ffi = ["cbindgen"]
+python = ["pyo3", "strum"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[dependencies]
+anyhow = { workspace = true }
+pyo3 = { workspace = true, optional = true }
+rust_decimal = { workspace = true }
+uuid = { workspace = true }
+rand = {workspace = true}
+serde = {workspace = true}
+serde_json = {workspace = true}
+ahash = {workspace = true}
+indexmap = {workspace = true}
+rust_decimal_macros = { workspace = true }
+statrs = {workspace = true}
+strum = { workspace = true, optional = true }
+pyo3-stub-gen = { workspace = true, optional = true }
+
+[dev-dependencies]
+rstest = { workspace = true }
+# 基准测试依赖（仅 cargo bench 时编译）
+criterion = { version = "0.5", features = ["html_reports"] }  # 基准测试核心库
+
+[build-dependencies]
+cbindgen = { workspace = true, optional = true }
+toml = { workspace = true }
+
+[[bench]]
+name = "greeks_benches"  # 测试名称（与 src/benches/ 下的文件名一致）
+path = "src/benches/greeks_benches.rs"  # 显式指定基准测试文件路径（核心！）
+harness = false  # 仅对该基准测试禁用默认框架，交给 criterion

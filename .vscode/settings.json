@@ -1,0 +1,6 @@
+{
+    "lldb.showDisassembly": "never",
+    "lldb.displayFormat": "auto",
+    "lldb.dereferencePointers": true,
+    "lldb.rust.dereferencePointers": true 
+}
